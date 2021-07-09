@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/gaetanBloch/Vanilla-GIS/issues"
   },
-  "homepage": "https://github.com/gaetanBloch/Vanilla-GIS#readme"
+  "homepage": "https://github.com/gaetanBloch/Vanilla-GIS#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
