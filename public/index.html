@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="utf-8"/>
+    <link href="./favicon.ico" rel="icon"/>
+    <meta content="width=device-width, initial-scale=1" name="viewport"/>
+    <meta content="Map" name="Vanilla GIS"/>
+    <link href="./manifest.json" rel="manifest"/>
+    <link href="https://fonts.gstatic.com" rel="preconnect">
+    <title>Vanilla GIS</title>
+
+    <!-- FontAwesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- Openlayers -->
+    <link href="http://ignf.github.io/geoportal-extensions/openlayers-latest/dist/GpPluginOpenLayers.css"
+          rel="stylesheet"/>
+    <link href="http://ignf.github.io/geoportal-extensions/openlayers-latest/dist/GpPluginOpenLayers-src.css"
+          rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.5.0/css/ol.css"
+          rel="stylesheet"
+          type="text/css">
+
+    <link href="style.css" rel="stylesheet" type="text/css">
+
+</head>
+<body>
+<noscript>You need to enable JavaScript to run this app.</noscript>
+
+<div id="map"></div>
+
+<!--Polyfills-->
+<script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL,Object.assign"></script>
+
+<!--OpenLayers-->
+<script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.5.0/build/ol.js"
+        type="text/javascript"></script>
+<script src="https://unpkg.com/ol-mapbox-style@6.3.2/dist/olms.js" type="text/javascript"></script>
+<!-- Extension Géoportail pour OpenLayers -->
+<script src="https://ignf.github.io/geoportal-extensions/openlayers-latest/dist/GpPluginOpenLayers.js"
+        type="text/javascript"></script>
+<script src="https://ignf.github.io/geoportal-extensions/openlayers-latest/dist/GpPluginOpenLayers-src.js"
+        type="text/javascript"></script>
+
+<script src="map.js" type="text/javascript"></script>
+
+</body>
+</html>
