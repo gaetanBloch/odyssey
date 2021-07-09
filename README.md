@@ -1,4 +1,4 @@
-# Vanilla-GIS
+# Vanilla GIS
 Geographical Information System displaying maps in Vanilla JavaScript
 
 ## Display map on browser 
