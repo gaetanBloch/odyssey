@@ -1,0 +1,19 @@
+{
+  "name": "vanilla-gis",
+  "version": "0.1.0",
+  "description": "Map demonstrator",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gaetanBloch/Vanilla-GIS.git"
+  },
+  "author": "Gaetan Bloch",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gaetanBloch/Vanilla-GIS/issues"
+  },
+  "homepage": "https://github.com/gaetanBloch/Vanilla-GIS#readme"
+}
