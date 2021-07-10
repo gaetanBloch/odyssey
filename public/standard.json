@@ -5327,7 +5327,7 @@
                 "text-field": "{texte}",
                 "text-size": 10,
                 "text-allow-overlap": false,
-				"text-anchor": "bottom-left",
+				"text-anchor": "left",
 				"text-offset": [0.2, 0.4],
                 "text-padding": 2,
                 "text-font": ["Source Sans Pro Italic"]
@@ -5504,7 +5504,7 @@
 				"stops": [[14, 3], [17, 8]]
 				},
                 "circle-color": "#1466B2"
-			}			
+			}
 		},
 		{
 			"id": "bati ponctuel hydrographique - Réservoir d'eau",
@@ -5960,7 +5960,7 @@
                                         "PISTE_CYCLABLE_SUP",
                                         "RUE_PIETONNE",
                                         "RUE_PIETONNE_SOU",
-                                        "RUE_PIETONNE_SUP", 
+                                        "RUE_PIETONNE_SUP",
                                         "SENTIER",
                                         "SENTIER_SOU",
                                         "SENTIER_SUP",
@@ -6244,7 +6244,7 @@
                 "text-allow-overlap": false,
 				"text-offset": [0.30, -0.25],
                 "text-padding": 3,
-				"text-anchor": "bottom-left",
+				"text-anchor": "left",
                 "text-font": ["Source Sans Pro"],
 				"icon-image": "Metro",
 				"icon-size": { "stops": [[15, 0.33], [17, 0.6]] }
@@ -6362,7 +6362,7 @@
 			"paint": {
                 "text-color": "#532A2A"
 			}
-		},		
+		},
 		{
 			"id": "toponyme bati ponc phare - niveau 14à19",
 			"type": "symbol",
@@ -6392,7 +6392,7 @@
 			"paint": {
                 "text-color": "#532A2A"
 			}
-		},			
+		},
 		{
 			"id": "toponyme bati ponc autre",
 			"type": "symbol",
@@ -6747,7 +6747,7 @@
                 "text-halo-color": "rgba(80, 80, 80, 0.5)",
                 "text-halo-width": 4
             }
-        },      
+        },
         {
             "id": "toponyme numéro de route - autoroute",
             "type": "symbol",
@@ -7077,7 +7077,7 @@
                 "text-field": "{texte}",
                 "text-size": 11,
                 "text-allow-overlap": false,
-				"text-anchor": "bottom-left",
+				"text-anchor": "left",
 				"text-offset": [0.30, 0.10],
                 "text-padding": 1,
                 "text-font": ["Source Sans Pro Regular"]
@@ -7115,7 +7115,7 @@
                 "text-field": "{texte}",
                 "text-size": 11.5,
                 "text-allow-overlap": false,
-				"text-anchor": "bottom-left",
+				"text-anchor": "left",
 				"text-offset": [0.30, 0.10],
                 "text-padding": 1,
                 "text-font": ["Source Sans Pro Regular"]
@@ -7158,7 +7158,7 @@
                         ["in","txt_typo",
                             "TYPO_B_5",
                             "TYPO_B_4"
-                            
+
                         ]
             ],
 			"layout": {
@@ -7185,7 +7185,7 @@
                         ["==","symbo","BOIS"],
                         ["in","txt_typo",
                             "TYPO_F_5",
-                            "TYPO_F_4"                            
+                            "TYPO_F_4"
                         ]
             ],
 			"layout": {
@@ -7473,7 +7473,7 @@
                 "text-field": "{texte}",
                 "text-size": 13,
                 "text-allow-overlap": false,
-				"text-anchor": "bottom-left",
+				"text-anchor": "left",
 				"text-offset": [0.30, 0.10],
                 "text-padding": 1,
                 "text-font": ["Source Sans Pro Regular"]
@@ -7809,7 +7809,7 @@
                 "text-field": "{texte}",
                 "text-size": {"stops": [[5, 10], [6, 15]]},
                 "text-allow-overlap": false,
-				"text-anchor": "bottom-left",
+				"text-anchor": "left",
 				"text-offset": [0.30, 0.10],
                 "text-padding": 1,
                 "text-font": ["Source Sans Pro Regular"]
@@ -8163,7 +8163,7 @@
                 "text-field": "{texte}",
                 "text-size": {"stops": [[4, 10], [6, 17]]},
                 "text-allow-overlap": true,
-				"text-anchor": "bottom-left",
+				"text-anchor": "left",
 				"text-offset": [0.30, 0.2],
                 "text-padding": 1,
                 "text-transform": "uppercase",
@@ -8410,7 +8410,7 @@
                 "text-field": "{texte}",
                 "text-size": {"stops": [[3, 10], [6, 20]]},
                 "text-allow-overlap": false,
-				"text-anchor": "bottom-left",
+				"text-anchor": "left",
 				"text-offset": [0.25, -0.10],
                 "text-padding": 1,
                 "text-transform": "uppercase",

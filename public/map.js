@@ -13,7 +13,7 @@ const ignOLLayer = new ol.layer.VectorTile({
 
 const fetchStyle = async () => {
     const plan = await fetch(
-        `classique.json`
+        `standard.json`
     );
     const style = await plan.json();
     olms.applyStyle(ignOLLayer, style, "plan_ign");
