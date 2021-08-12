@@ -1,5 +1,5 @@
 const go = () => {
-    const ignKey = 'choisirgeoportail';
+  const ignKey = 'choisirgeoportail';
 
   const ignOLLayer = new ol.layer.VectorTile({
     title: 'Plan IGN vecteur',
@@ -67,7 +67,7 @@ const go = () => {
 
 // Connection to Geoportail server
 Gp.Services.getConfig({
-  serverUrl: './ign/autoconf.js',
+  serverUrl: './ign/autoconf-https.json',
   callbackSuffix: '',
   onSuccess: go,
 });
