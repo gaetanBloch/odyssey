@@ -1,9 +1,11 @@
-const express = require('express')
-const app = express()
-const port = 3000
+import express, { static } from 'express';
+const app = express();
+const port = 3000;
 
-app.use(express.static('public'));
-
+// Set up the server
+app.use(static('public'));
 app.listen(port, () => {
-    console.log(`Application listening at http://localhost:${port}`)
-})
+  console.log(`Server listening on http://localhost:${port}`);
+});
+
+
