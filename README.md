@@ -1,5 +1,5 @@
 # France GIS
-Geographical Information System displaying maps in Vanilla JavaScript mainly fro French territory
+Geographical Information System displaying maps in Vanilla JavaScript mainly for French territory
 
 ## Display map on browser 
 - install node.js
