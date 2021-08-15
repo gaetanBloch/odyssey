@@ -17,13 +17,13 @@ const go = () => {
     }),
     attributions:
       '<a href="https://geoservices.ign.fr/documentation/geoservices/vecteur-tuile.html">&copy; IGN</a>',
-    declutter: false,
+    declutter: true,
   });
 
   const fetchStyle = async () => {
     let plan = await fetch(
-      `ign/standard.json`
-      //   `https://wxs.ign.fr/${ignKey}/static/vectorTiles/styles/PLAN.IGN/standard.json`
+      // `ign/standard.json`
+        `https://wxs.ign.fr/${ignKey}/static/vectorTiles/styles/PLAN.IGN/standard.json`
     );
     const style = await plan.json();
     const setStyle = async () => {
@@ -40,6 +40,8 @@ const go = () => {
   const map = new ol.Map({
     layers: [
       new ol.layer.GeoportalWMTS({
+        // layer: 'GEOGRAPHICALGRIDSYSTEMS.MAPS',
+        // layer: 'OI.OrthoimageCoverage',
         layer: 'ORTHOIMAGERY.ORTHOPHOTOS',
       }),
     ],
