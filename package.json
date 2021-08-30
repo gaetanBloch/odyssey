@@ -14,10 +14,14 @@
   "author": "Gaetan Bloch",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/gaetanBloch/Vanilla-GIS/issues"
+    "url": "https://github.com/gaetanBloch/fr-gis/issues"
   },
-  "homepage": "https://github.com/gaetanBloch/Vanilla-GIS#readme",
+  "homepage": "https://github.com/gaetanBloch/fr-gis#readme",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.12"
   }
 }
