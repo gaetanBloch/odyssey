@@ -10,11 +10,11 @@
     <title>FR GIS</title>
 
     <!-- Openlayers Styles -->
-    <link
+    <!-- <link
       href="http://ignf.github.io/geoportal-extensions/openlayers-latest/dist/GpPluginOpenLayers-src.css"
       rel="stylesheet"
       type="text/css"
-    />
+    /> -->
     <link
       href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.6.1/css/ol.css"
       rel="stylesheet"
@@ -22,7 +22,7 @@
     />
 
     <!-- <link href="ign/ol.css" rel="stylesheet" type="text/css"> -->
-    <!-- <link href="ign/GpPluginOpenLayers.css" rel="stylesheet" type="text/css"> -->
+    <link href="ign/GpPluginOpenLayers.css" rel="stylesheet" type="text/css">
     <link href="style.css" rel="stylesheet" type="text/css" />
 
     <!--OpenLayers Scripts-->
@@ -34,34 +34,25 @@
       src="https://unpkg.com/ol-mapbox-style@6.3.2/dist/olms.js"
       type="text/javascript"
     ></script>
-    <!-- Extension Géoportail pour OpenLayers -->
-    <script
+    <!-- Extension Geoportal pour OpenLayers -->
+    <!-- <script
       src="https://ignf.github.io/geoportal-extensions/openlayers-latest/dist/GpPluginOpenLayers.js"
       type="text/javascript"
     ></script>
     <script
       src="https://ignf.github.io/geoportal-extensions/openlayers-latest/dist/GpPluginOpenLayers-src.js"
       type="text/javascript"
-    ></script>
+    ></script> -->
   </head>
 
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
 
-    <span class="search">
-      <label for="origin" >Origin</label>
-      <input id="origin" type="text" value="2.341170,48.860241"/>
-      <label for="destination">Destination</label>
-      <input id="destination" type="text" value="7.749170,48.606739"/>
-      <button id="find">FIND</button>
-    </span>
-
-
     <div id="map"></div>
 
     <!-- <script src="ign/ol6.js" type="text/javascript"></script> -->
     <!-- <script src="ign/olms6.js" type="text/javascript"></script> -->
-    <!-- <script src="ign/GpPluginOpenLayers.js" type="text/javascript"></script> -->
+    <script src="ign/GpPluginOpenLayers.js" type="text/javascript"></script>
     <script src="map.js" type="text/javascript"></script>
   </body>
 </html>
