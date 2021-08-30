@@ -4,10 +4,10 @@
     <meta charset="utf-8" />
     <link href="favicon.ico" rel="icon" />
     <meta content="width=device-width, initial-scale=1" name="viewport" />
-    <meta content="Map" name="Vanilla GIS" />
+    <meta content="Map" name="FR GIS" />
     <link href="./manifest.json" rel="manifest" />
     <link href="https://fonts.gstatic.com" rel="preconnect" />
-    <title>Vanilla GIS</title>
+    <title>FR GIS</title>
 
     <!-- Openlayers Styles -->
     <link
@@ -47,6 +47,15 @@
 
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
+
+    <span class="search">
+      <label for="origin" >Origin</label>
+      <input id="origin" type="text" value="2.341170,48.860241"/>
+      <label for="destination">Destination</label>
+      <input id="destination" type="text" value="7.749170,48.606739"/>
+      <button id="find">FIND</button>
+    </span>
+
 
     <div id="map"></div>
 
