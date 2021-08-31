@@ -41,8 +41,6 @@ const go = () => {
 
   map.addLayer(
     new ol.layer.GeoportalWMTS({
-      // layer: 'GEOGRAPHICALGRIDSYSTEMS.MAPS',
-      // layer: 'OI.OrthoimageCoverage',
       layer: 'ORTHOIMAGERY.ORTHOPHOTOS',
     })
   );

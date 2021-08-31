@@ -10,22 +10,7 @@ body {
   position: absolute;
   left: 0;
   right: 0;
-  top: 5em;
+  top: 0;
   bottom: 0;
   background: transparent;
-}
-
-.search {
-  display: inline-flex;
-  height: 4em;
-  flex-direction: row;
-  align-items: center;
-}
-
-.search > * {
-  margin-left: 1em;
-}
-
-input {
-    width: 200px;
 }
