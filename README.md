@@ -6,4 +6,4 @@ Geographical Information System displaying maps in Vanilla JavaScript mainly for
 - go to root diectory of the project
 - run `npm install`
 - run `npm start`
-- go to http://localhost:3000
+- go to http://localhost:8080
