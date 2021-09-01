@@ -1,7 +1,22 @@
+// Prevent Babel related errors
+import 'core-js/stable';
+import 'regenerator-runtime/runtime';
+
+import 'ol/ol.css';
+import './style.scss';
+import { Map, View } from 'ol';
+import { createXYZ } from 'ol/tilegrid';
+import { MVT } from 'ol/format';
+import { VectorTile as VectorSource } from 'ol/source';
+import { VectorTile as VectorLayer } from 'ol/layer';
+import { applyStyle } from 'ol-mapbox-style';
+import * as Gp from 'geoportal-extensions-openlayers';
+
 const ignKey = 'choisirgeoportail';
-const map = new ol.Map({
+
+const map = new Map({
   target: document.getElementById('map'),
-  view: new ol.View({
+  view: new View({
     center: [287963, 5948655],
     zoom: 6,
     constrainResolution: true,
@@ -20,14 +35,14 @@ const map = new ol.Map({
 });
 
 const go = () => {
-  const ignOLLayer = new ol.layer.VectorTile({
+  const ignOLLayer = new VectorLayer({
     title: 'Plan IGN vecteur',
     visible: true,
     opacity: 0.8,
-    source: new ol.source.VectorTile({
-      format: new ol.format.MVT(),
+    source: new VectorSource({
+      format: new MVT(),
       url: `https://wxs.ign.fr/${ignKey}/geoportail/tms/1.0.0/PLAN.IGN/{z}/{x}/{y}.pbf`,
-      tileGrid: ol.tilegrid.createXYZ({
+      tileGrid: createXYZ({
         // extent : [minx, miny, maxx, maxy],
         maxZoom: 22,
         minZoom: 1,
@@ -40,20 +55,20 @@ const go = () => {
   });
 
   map.addLayer(
-    new ol.layer.GeoportalWMTS({
+    new Gp.olExtended.layer.GeoportalWMTS({
       layer: 'ORTHOIMAGERY.ORTHOPHOTOS',
     })
   );
 
   // Fetch style IIFE
   (async () => {
-    let plan = await fetch(
+    const plan = await fetch(
       // `ign/standard.json`
       `https://wxs.ign.fr/${ignKey}/static/vectorTiles/styles/PLAN.IGN/standard.json`
     );
     const style = await plan.json();
     const setStyle = async () => {
-      olms.applyStyle(ignOLLayer, style, 'plan_ign');
+      applyStyle(ignOLLayer, style, 'plan_ign');
     };
     map.addLayer(ignOLLayer);
     if (ignOLLayer.getSource()) {
@@ -66,36 +81,7 @@ const go = () => {
 
 // Connection to Geoportal server
 Gp.Services.getConfig({
-  serverUrl: './ign/autoconf-https.json',
-  callbackSuffix: '',
+  // Or download the file from https://ignf.github.io/geoportal-access-lib/latest/jsdoc/tutorial-optimize-getconfig.html
+  apiKey: ignKey,
   onSuccess: go,
-});
-
-//
-
-document.getElementById('find').addEventListener('click', async () => {
-  const origin = document.getElementById('origin').value;
-  const destination = document.getElementById('destination').value;
-  const url = `http://wxs.ign.fr/${ignKey}/itineraire/rest/route.json?origin=${origin}&destination=${destination}&method=DISTANCE&graphName=Pieton`;
-  const response = await fetch(url);
-  const data = await response.json();
-  console.log(data);
-  const wkt = data.geometryWkt;
-  const format = new ol.format.WKT();
-  const feature = format.readFeature(wkt, {
-    dataProjection: 'EPSG:4326',
-    featureProjection: 'EPSG:3857',
-  });
-  const vector = new ol.layer.Vector({
-    source: new ol.source.Vector({
-      features: [feature],
-    }),
-    style: new ol.style.Style({
-      stroke: new ol.style.Stroke({
-        color: 'rgba(0,0,0,0.7)',
-        width: 3,
-      }),
-    }),
-  });
-  map.addLayer(vector);
 });
