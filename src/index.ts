@@ -9,7 +9,9 @@ import { createXYZ } from 'ol/tilegrid';
 import MVT from 'ol/format/MVT';
 import VectorTileLayer from 'ol/layer/VectorTile';
 import VectorTileSource from 'ol/source/VectorTile';
+// @ts-ignore
 import { applyStyle } from 'ol-mapbox-style';
+// @ts-ignore
 import * as Gp from 'geoportal-extensions-openlayers';
 
 const ignKey = 'choisirgeoportail';
@@ -36,7 +38,6 @@ const map = new Map({
 
 const go = () => {
   const ignOLLayer = new VectorTileLayer({
-    title: 'Vector IGN Map',
     visible: true,
     opacity: 0.8,
     source: new VectorTileSource({
@@ -52,7 +53,6 @@ const go = () => {
         '<a href="https://github.com/gaetanbloch">GBloch</a>',
       ],
     }),
-
     declutter: true,
   });
 
