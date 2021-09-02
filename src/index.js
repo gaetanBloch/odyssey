@@ -6,9 +6,9 @@ import 'ol/ol.css';
 import './style.scss';
 import { Map, View } from 'ol';
 import { createXYZ } from 'ol/tilegrid';
-import { MVT } from 'ol/format';
-import { VectorTile as VectorSource } from 'ol/source';
-import { VectorTile as VectorLayer } from 'ol/layer';
+import MVT from 'ol/format/MVT';
+import VectorTileLayer from 'ol/layer/VectorTile';
+import VectorTileSource from 'ol/source/VectorTile';
 import { applyStyle } from 'ol-mapbox-style';
 import * as Gp from 'geoportal-extensions-openlayers';
 
@@ -20,7 +20,7 @@ const map = new Map({
     center: [287963, 5948655],
     zoom: 6,
     constrainResolution: true,
-    maxZoom: 21,
+    maxZoom: 26,
     minZoom: 0,
     resolutions: [
       156543.033928041, 78271.51696402048, 39135.758482010235,
@@ -35,22 +35,24 @@ const map = new Map({
 });
 
 const go = () => {
-  const ignOLLayer = new VectorLayer({
-    title: 'Plan IGN vecteur',
+  const ignOLLayer = new VectorTileLayer({
+    title: 'Vector IGN Map',
     visible: true,
     opacity: 0.8,
-    source: new VectorSource({
+    source: new VectorTileSource({
       format: new MVT(),
       url: `https://wxs.ign.fr/${ignKey}/geoportail/tms/1.0.0/PLAN.IGN/{z}/{x}/{y}.pbf`,
       tileGrid: createXYZ({
-        // extent : [minx, miny, maxx, maxy],
-        maxZoom: 22,
+        maxZoom: 26,
         minZoom: 1,
-        tileSize: 256,
+        tileSize: 512,
       }),
+      attributions: [
+        '<a href="https://geoservices.ign.fr/documentation/geoservices/vecteur-tuile.html">©IGN</a></br>',
+        '<a href="https://github.com/gaetanbloch">GBloch</a>',
+      ],
     }),
-    attributions:
-      '<a href="https://geoservices.ign.fr/documentation/geoservices/vecteur-tuile.html">&copy; IGN</a>',
+
     declutter: true,
   });
 
