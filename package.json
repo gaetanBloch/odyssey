@@ -4,7 +4,7 @@
   "description": "My webpack project",
   "main": "src/index.ts",
   "engines": {
-    "node": "16.x"
+    "node": "14.x"
   },
   "scripts": {
     "start": "webpack-dev-server --mode=development",
