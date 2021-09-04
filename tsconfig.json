@@ -18,7 +18,8 @@
     "noImplicitReturns": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "lib": ["es2018", "dom"]
+    "lib": ["es2018", "dom"],
+    "skipLibCheck": true
   },
   "angularCompilerOptions": {
     "strictInjectionParameters": true,
