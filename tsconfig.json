@@ -1,12 +1,28 @@
 {
+  "compileOnSave": true,
   "compilerOptions": {
-    "outDir": "./dist/",
+    "baseUrl": "./",
+    "outDir": "./dist/out-tsc",
     "noImplicitAny": true,
-    "module": "es6",
-    "target": "es5",
+    "module": "es2020",
+    "target": "es2017",
     "jsx": "react",
     "allowJs": true,
     "sourceMap": true,
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "downlevelIteration": true,
+    "noFallthroughCasesInSwitch": true,
+    "declaration": false,
+    "experimentalDecorators": true,
+    "noImplicitReturns": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "lib": ["es2018", "dom"]
+  },
+  "angularCompilerOptions": {
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "strictTemplates": true
   }
 }

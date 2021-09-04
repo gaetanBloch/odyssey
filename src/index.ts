@@ -3,7 +3,7 @@ import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 
 import 'ol/ol.css';
-import './style.scss';
+import './styles.scss';
 import { Map, View } from 'ol';
 import { createXYZ } from 'ol/tilegrid';
 import MVT from 'ol/format/MVT';

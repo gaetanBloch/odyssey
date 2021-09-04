@@ -14,7 +14,7 @@
         "ecmaVersion": 12,
         "sourceType": "module"
     },
-    "ignorePatterns": ["/node_modules", "/public"],
+    "ignorePatterns": ["/node_modules", "/dist"],
     "rules": {
         "prettier/prettier": ["error", {"singleQuote": true, "parser": "flow"}]
     }
