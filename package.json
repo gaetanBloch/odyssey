@@ -21,7 +21,10 @@
     "build:dev": "webpack --mode=development",
     "build:prod": "webpack --mode=production --node-env=production",
     "webpack:watch": "webpack --watch",
-    "serve": "webpack serve"
+    "serve": "webpack serve",
+    "e2e": "ng e2e",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run"
   },
   "repository": {
     "type": "git",
@@ -61,6 +64,7 @@
     "@angular/compiler-cli": "~12.2.0",
     "@babel/core": "^7.15.0",
     "@babel/preset-env": "^7.14.9",
+    "@cypress/schematic": "^1.5.0",
     "@types/jasmine": "~3.8.0",
     "@types/jest": "27.0.1",
     "@types/node": "^12.11.1",
@@ -93,6 +97,7 @@
     "typescript": "~4.3.5",
     "webpack": "^5.51.1",
     "webpack-cli": "^4.8.0",
-    "webpack-dev-server": "^4.0.0"
+    "webpack-dev-server": "^4.0.0",
+    "cypress": "8.3.1"
   }
 }
