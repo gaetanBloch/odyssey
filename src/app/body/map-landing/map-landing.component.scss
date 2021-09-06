@@ -1,0 +1,17 @@
+@import "../../../styles";
+
+.container {
+  display: flex;
+  flex: 1;
+  position: absolute;
+  height: 100%;
+  width: $container-width;
+  align-items: center;
+  justify-content: center;
+}
+
+img {
+  // Centering map
+  width: calc(100% - 6em);
+  height: calc(100% - 3em);
+}

@@ -12,10 +12,10 @@ import * as Gp from 'geoportal-extensions-openlayers';
 
 @Component({
   selector: 'app-map-container',
-  templateUrl: './map-container.component.html',
-  styleUrls: ['./map-container.component.scss'],
+  templateUrl: './map-ol-container.component.html',
+  styleUrls: ['./map-ol-container.component.scss'],
 })
-export class MapContainerComponent implements OnInit {
+export class MapOlContainerComponent implements OnInit {
   private readonly ignKey = 'choisirgeoportail';
   private map?: Map;
 

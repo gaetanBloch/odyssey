@@ -1,3 +1,6 @@
+$settings-width: 10em;
+$container-width: calc(100% - #{$settings-width});
+
 body {
   margin: 0;
   width: 100vw;
