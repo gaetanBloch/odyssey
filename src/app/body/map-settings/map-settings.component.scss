@@ -1,0 +1,27 @@
+.settings {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  box-shadow: 1px 0 3px rgba(100, 100, 100, 0.45);
+
+  &__title {
+    display: inline-flex;
+    font-size: 1.25em;
+    margin: 0.3em auto;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    padding: 0.5em;
+
+    > * {
+      margin-top: 0.5em;
+    }
+
+    &__ol-link {
+      display: inline-flex;
+      margin: auto;
+    }
+  }
+}

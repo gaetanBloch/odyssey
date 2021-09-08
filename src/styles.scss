@@ -1,4 +1,4 @@
-$settings-width: 10em;
+$settings-width: 13em;
 $container-width: calc(100% - #{$settings-width});
 
 body {
@@ -6,3 +6,6 @@ body {
   width: 100vw;
   height: 100vh;
 }
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

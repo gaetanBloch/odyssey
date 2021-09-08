@@ -1,3 +1,5 @@
+@import '../../styles.scss';
+
 .body {
   display: flex;
   width: 100%;
@@ -7,7 +9,6 @@
 
   app-map-settings {
     display: flex;
-    width: 10em;
-    background-color: red;
+    width: $settings-width;
   }
 }

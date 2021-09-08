@@ -1,3 +1,15 @@
 <div class="settings">
-settings
+  <h1 class='settings__title'>Settings</h1>
+  <div class='settings__form'>
+    <mat-form-field>
+      <mat-label>URL</mat-label>
+      <input type='text' placeholder='https://google.maps' matInput>
+    </mat-form-field>
+    <a class='settings__form__ol-link' routerLink='/ol'>
+      <button role='button' color='primary' mat-flat-button>
+        OpenLayers Map
+      </button>
+    </a>
+  </div>
+
 </div>
