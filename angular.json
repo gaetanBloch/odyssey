@@ -16,6 +16,12 @@
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
+      "i18n": {
+        "sourceLocale": "en-US",
+        "locales": {
+          "fr": "src/locale/messages.fr.xlf"
+        }
+      },
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -35,7 +41,9 @@
               "node_modules/ol/ol.css",
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "localize": ["fr"],
+            "aot": true
           },
           "configurations": {
             "production": {
