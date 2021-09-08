@@ -52,6 +52,7 @@
     "express": "^4.17.1",
     "geoportal-extensions-openlayers": "^3.1.0",
     "ol": "^6.6.1",
+    "ol-ext": "^3.2.6",
     "ol-mapbox-style": "^6.4.1",
     "regenerator-runtime": "^0.13.9",
     "rxjs": "~6.6.0",

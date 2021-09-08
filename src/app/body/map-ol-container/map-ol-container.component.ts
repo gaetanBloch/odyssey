@@ -4,7 +4,12 @@ import { Map, View } from 'ol';
 import { createXYZ } from 'ol/tilegrid';
 import MVT from 'ol/format/MVT';
 import VectorTileLayer from 'ol/layer/VectorTile';
+import TileLayer from 'ol/layer/Tile';
 import VectorTileSource from 'ol/source/VectorTile';
+import OSM from 'ol/source/OSM';
+
+// @ts-ignore
+import LayerSwitcher from 'ol-ext/control/LayerSwitcher';
 // @ts-ignore
 import { applyStyle } from 'ol-mapbox-style';
 // @ts-ignore
@@ -39,29 +44,40 @@ export class MapOlContainerComponent implements OnInit {
       declutter: true,
     });
 
+    // OpenStreetMap Layer
+    const osmLayer = new TileLayer({
+      source: new OSM()
+    })
+    this.map?.addLayer(osmLayer);
+
     this.map?.addLayer(
       new Gp.olExtended.layer.GeoportalWMTS({
         layer: 'ORTHOIMAGERY.ORTHOPHOTOS',
       })
     );
 
+    this.map?.addLayer(ignOLLayer);
+
     // Fetch style IIFE
     (async () => {
       const plan = await fetch(
-        // `ign/standard.json`
         `https://wxs.ign.fr/${this.ignKey}/static/vectorTiles/styles/PLAN.IGN/standard.json`
       );
       const style = await plan.json();
       const setStyle = async () => {
         applyStyle(ignOLLayer, style, 'plan_ign');
       };
-      this.map?.addLayer(ignOLLayer);
       if (ignOLLayer.getSource()) {
         await setStyle();
       } else {
         ignOLLayer.once('change:source', setStyle);
       }
     })().catch(console.error);
+
+    const lsControl = new LayerSwitcher({
+      collapsed: true
+    })
+    this.map?.addControl(lsControl);
   };
 
   constructor() {}
