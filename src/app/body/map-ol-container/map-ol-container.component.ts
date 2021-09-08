@@ -18,50 +18,41 @@ import * as Gp from 'geoportal-extensions-openlayers';
 @Component({
   selector: 'app-map-container',
   templateUrl: './map-ol-container.component.html',
-  styleUrls: ['./map-ol-container.component.scss'],
+  styleUrls: ['./map-ol-container.component.scss']
 })
 export class MapOlContainerComponent implements OnInit {
   private readonly ignKey = 'choisirgeoportail';
   private map?: Map;
 
   private go = (): void => {
+
+    // IGN Vector Layer
     const ignOLLayer = new VectorTileLayer({
-      visible: true,
-      opacity: 0.8,
+      // @ts-ignore
+      title: 'Vector IGN',
+      baseLayer: true,
+      visible: false,
       source: new VectorTileSource({
         format: new MVT(),
-        url: `https://wxs.ign.fr/${this.ignKey}/geoportail/tms/1.0.0/PLAN.IGN/{z}/{x}/{y}.pbf`,
+        url: `https://wxs.ign.fr/${ this.ignKey }/geoportail/tms/1.0.0/PLAN.IGN/{z}/{x}/{y}.pbf`,
         tileGrid: createXYZ({
           maxZoom: 26,
           minZoom: 1,
-          tileSize: 512,
+          tileSize: 512
         }),
         attributions: [
           '<a href="https://geoservices.ign.fr/documentation/geoservices/vecteur-tuile.html">©IGN</a></br>',
-          '<a href="https://github.com/gaetanbloch">GBloch</a>',
-        ],
+          '<a href="https://github.com/gaetanbloch">GBloch</a>'
+        ]
       }),
-      declutter: true,
+      declutter: true
     });
-
-    // OpenStreetMap Layer
-    const osmLayer = new TileLayer({
-      source: new OSM()
-    })
-    this.map?.addLayer(osmLayer);
-
-    this.map?.addLayer(
-      new Gp.olExtended.layer.GeoportalWMTS({
-        layer: 'ORTHOIMAGERY.ORTHOPHOTOS',
-      })
-    );
-
     this.map?.addLayer(ignOLLayer);
 
     // Fetch style IIFE
     (async () => {
       const plan = await fetch(
-        `https://wxs.ign.fr/${this.ignKey}/static/vectorTiles/styles/PLAN.IGN/standard.json`
+        `https://wxs.ign.fr/${ this.ignKey }/static/vectorTiles/styles/PLAN.IGN/standard.json`
       );
       const style = await plan.json();
       const setStyle = async () => {
@@ -74,13 +65,25 @@ export class MapOlContainerComponent implements OnInit {
       }
     })().catch(console.error);
 
+    // OpenStreetMap Layer
+    const osmLayer = new TileLayer({
+      // @ts-ignore
+      title: 'Raster OSM',
+      baseLayer: true,
+      source: new OSM()
+    });
+    this.map?.addLayer(osmLayer);
+
     const lsControl = new LayerSwitcher({
-      collapsed: true
-    })
+      collapsed: true,
+      reordering: false,
+      selection: true,
+    });
     this.map?.addControl(lsControl);
   };
 
-  constructor() {}
+  constructor() {
+  }
 
   ngOnInit(): void {
     this.map = new Map({
@@ -99,16 +102,16 @@ export class MapOlContainerComponent implements OnInit {
           38.21851414258813, 19.10925707129406, 9.554628535647032,
           4.777314267823516, 2.388657133911758, 1.194328566955879,
           0.5971642834779395, 0.2985821417389697, 0.1492910708694849,
-          0.0746455354347424,
-        ],
-      }),
+          0.0746455354347424
+        ]
+      })
     });
 
     // Connection to Geoportal server
     Gp.Services.getConfig({
       // Or download the file from https://ignf.github.io/geoportal-access-lib/latest/jsdoc/tutorial-optimize-getconfig.html
       apiKey: this.ignKey,
-      onSuccess: this.go,
+      onSuccess: this.go
     });
   }
 }
