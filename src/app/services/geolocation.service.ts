@@ -26,6 +26,18 @@ export class GeolocationService {
       }))
   }
 
+  public getAddressFromCoordinates = (getRequest: string):
+    Observable<Coordinates> => {
+    return this.http.get<any>(getRequest)
+      .pipe(map((data) => {
+        console.log(data);
+        return {
+          address: data.features[0].properties.label,
+          features: data
+        };
+      }))
+  }
+
   public setPoint = (point: any): void => {
     console.log(point);
     this.currentPoint.next(point);

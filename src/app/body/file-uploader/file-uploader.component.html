@@ -1,9 +1,12 @@
 <div class='uploader'>
+  <span *ngIf='file' class='uploader__file-name'>
+    {{ file.name }}
+  </span>
   <button class='uploader__button'
           (click)='onClick()'
           color='primary'
           mat-button
-          role='button'>
+          type='button'>
     <mat-icon>add</mat-icon>
     {{ label }}
   </button>
@@ -14,7 +17,4 @@
          name='fileUpload'
          style='display:none;'
          type='file' />
-  <span *ngIf='file' class='uploader__file-name'>
-    {{ file.name }}
-  </span>
 </div>
