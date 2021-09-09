@@ -96,8 +96,8 @@ export class MapSettingsComponent implements OnInit {
   }
 
   reverse = (): void => {
-    const lon = this.getReverseLon().trim() ? this.getReverseLon() : 2.347;
-    const lat = this.getReverseLat().trim() ? this.getReverseLat() : 48.859;
+    const lon = this.getReverseLon() ? this.getReverseLon() : 2.347;
+    const lat = this.getReverseLat() ? this.getReverseLat() : 48.859;
     this.geoService.getAddressFromCoordinates(
       `https://api-adresse.data.gouv.fr/reverse?lon=${lon}&lat=${lat}`)
       .subscribe((coords) => {
