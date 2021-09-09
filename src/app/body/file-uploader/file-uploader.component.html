@@ -1,0 +1,20 @@
+<div class='uploader'>
+  <button class='uploader__button'
+          (click)='onClick()'
+          color='primary'
+          mat-button
+          role='button'>
+    <mat-icon>add</mat-icon>
+    {{ label }}
+  </button>
+  <input #fileUpload
+         [multiple]='false'
+         accept='application/json'
+         id='fileUpload'
+         name='fileUpload'
+         style='display:none;'
+         type='file' />
+  <span *ngIf='file' class='uploader__file-name'>
+    {{ file.name }}
+  </span>
+</div>

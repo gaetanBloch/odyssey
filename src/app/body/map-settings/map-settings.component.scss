@@ -17,11 +17,15 @@
 
     > * {
       margin-top: 0.5em;
+      mat-form-field {
+        display: inline;
+      }
     }
 
     &__ol-link {
-      display: inline-flex;
-      margin: auto;
+      display: flex;
+      width: 100%;
+      justify-content: center;
     }
   }
 }
