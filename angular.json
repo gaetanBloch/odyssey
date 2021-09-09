@@ -50,7 +50,9 @@
               "src/styles.scss"
             ],
             "scripts": [],
-            "localize": ["en"],
+            "localize": [
+              "en"
+            ],
             "aot": true
           },
           "configurations": {
@@ -65,8 +67,8 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumWarning": "2mb",
+                  "maximumError": "3mb"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -161,6 +163,10 @@
               "devServerTarget": "fr-gis:serve:production"
             }
           }
+        },
+        "deploy": {
+          "builder": "angular-cli-ghpages:deploy",
+          "options": {}
         }
       }
     }
