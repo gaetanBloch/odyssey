@@ -2,103 +2,106 @@
   <h1 class='settings__title' i18n>Settings</h1>
   <form class='settings__form' [formGroup]='settingsForm' (ngSubmit)='onSubmit()'>
     <app-file-uploader label='Set Config File' i18n-label></app-file-uploader>
-    <mat-form-field>
-      <mat-label i18n>Feature</mat-label>
-      <mat-select formControlName='featureType' required>
-        <mat-option *ngFor='let feature of getFeatures()' [value]='feature'>
-          {{ feature }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-    <div [ngSwitch]='getFeatureType()'>
-      <div *ngSwitchCase='"geolocation"'>
-        <mat-form-field>
-          <mat-label i18n>Address</mat-label>
-          <input type='text'
-                 placeholder='280 rue saint honore'
-                 formControlName='geoAddress'
-                 matInput
-                 required>
-        </mat-form-field>
-        <mat-form-field>
-          <mat-label i18n>Longitude</mat-label>
-          <input type='text'
-                 [value]='geoLongitude'
-                 disabled
-                 matInput>
-        </mat-form-field>
-        <mat-form-field>
-          <mat-label i18n>Latitude</mat-label>
-          <input type='text'
-                 [value]='geoLatitude'
-                 disabled
-                 matInput>
-        </mat-form-field>
-      </div>
-      <div *ngSwitchCase='"reverseGeolocation"'>
-        <mat-form-field>
-          <mat-label i18n>Longitude</mat-label>
-          <input type='number'
-                 placeholder='2.347'
-                 formControlName='reverseLongitude'
-                 matInput>
-        </mat-form-field>
-        <mat-form-field>
-          <mat-label i18n>Latitude</mat-label>
-          <input type='number'
-                 placeholder='48.859'
-                 formControlName='reverseLatitude'
-                 matInput>
-        </mat-form-field>
-        <mat-form-field>
-          <mat-label i18n>Address</mat-label>
-          <input type='text'
-                 [value]='reverseAddress'
-                 disabled
-                 matInput>
-        </mat-form-field>
-      </div>
-      <div *ngSwitchCase='"itinerary"'>
-        <mat-form-field>
-          <mat-label i18n>Origin</mat-label>
-          <input type='text'
-                 placeholder='2.347'
-                 formControlName='origin'
-                 matInput>
-        </mat-form-field>
-        <mat-form-field>
-          <mat-label i18n>Destination</mat-label>
-          <input type='number'
-                 placeholder='48.859'
-                 formControlName='destination'
-                 matInput>
-        </mat-form-field>
-        <mat-form-field>
-          <mat-label i18n>Transport</mat-label>
-          <mat-select formControlName='transportType' required>
-            <mat-option value='feature'></mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field>
-          <mat-label i18n>Duration (seconds)</mat-label>
-          <input type='text'
-                 [value]='duration'
-                 disabled
-                 matInput>
-        </mat-form-field>
-        <mat-form-field>
-          <mat-label i18n>Distance (meters)</mat-label>
-          <input type='text'
-                 [value]='distance'
-                 disabled
-                 matInput>
-        </mat-form-field>
+    <div *ngIf='!home'>
+      <mat-form-field>
+        <mat-label i18n>Feature</mat-label>
+        <mat-select formControlName='featureType' required>
+          <mat-option *ngFor='let feature of getFeatures()' [value]='feature'>
+            {{ feature }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div [ngSwitch]='getFeatureType()'>
+        <div *ngSwitchCase='"geolocation"'>
+          <mat-form-field>
+            <mat-label i18n>Address</mat-label>
+            <input type='text'
+                   placeholder='280 rue saint honore'
+                   formControlName='geoAddress'
+                   matInput
+                   required>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label i18n>Longitude</mat-label>
+            <input type='text'
+                   [value]='geoLongitude'
+                   disabled
+                   matInput>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label i18n>Latitude</mat-label>
+            <input type='text'
+                   [value]='geoLatitude'
+                   disabled
+                   matInput>
+          </mat-form-field>
+        </div>
+        <div *ngSwitchCase='"reverseGeolocation"'>
+          <mat-form-field>
+            <mat-label i18n>Longitude</mat-label>
+            <input type='number'
+                   placeholder='2.347'
+                   formControlName='reverseLongitude'
+                   matInput>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label i18n>Latitude</mat-label>
+            <input type='number'
+                   placeholder='48.859'
+                   formControlName='reverseLatitude'
+                   matInput>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label i18n>Address</mat-label>
+            <input type='text'
+                   [value]='reverseAddress'
+                   disabled
+                   matInput>
+          </mat-form-field>
+        </div>
+        <div *ngSwitchCase='"itinerary"'>
+          <mat-form-field>
+            <mat-label i18n>Origin</mat-label>
+            <input type='text'
+                   formControlName='origin'
+                   matInput
+                   required>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label i18n>Destination</mat-label>
+            <input type='text'
+                   formControlName='destination'
+                   matInput
+                   required>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label i18n>Transport</mat-label>
+            <mat-select formControlName='transportType' required>
+              <mat-option value='pieton'>pieton</mat-option>
+              <mat-option value='voiture'>voiture</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label i18n>Duration</mat-label>
+            <input type='text'
+                   [value]='duration'
+                   disabled
+                   matInput>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label i18n>Distance</mat-label>
+            <input type='text'
+                   [value]='distance'
+                   disabled
+                   matInput>
+          </mat-form-field>
+        </div>
       </div>
     </div>
     <button class='settings__form__ol-link'
             type='submit'
             color='primary'
-            [disabled]='!settingsForm.valid'
+            [disabled]='home === false && !settingsForm.valid'
             mat-flat-button>
       <span i18n>OpenLayers Map</span>
     </button>

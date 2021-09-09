@@ -15,10 +15,16 @@ export class MapSettingsComponent implements OnInit {
     geoAddress: new FormControl(''),
     reverseLongitude: new FormControl(''),
     reverseLatitude: new FormControl(''),
+    origin: new FormControl('-0.67561,45.87869'),
+    destination: new FormControl('-0.24465,46.01524'),
+    transportType: new FormControl('voiture'),
   });
   geoLongitude? = ' ';
   geoLatitude? = ' ';
   reverseAddress? = ' ';
+  distance? = ' ';
+  duration? = ' ';
+  home = true
 
   constructor(
     private route: ActivatedRoute,
@@ -28,6 +34,7 @@ export class MapSettingsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.home = this.router.url === '/';
   }
 
   // Getting all values of Feature enum
@@ -35,6 +42,7 @@ export class MapSettingsComponent implements OnInit {
     Object.keys(FeatureType).filter((item) => isNaN(Number(item)));
 
   onSubmit = (): void => {
+    this.home = false;
     this.router.navigate(['ol']);
     switch (this.getFeatureType()) {
       case 'geolocation':
@@ -42,6 +50,9 @@ export class MapSettingsComponent implements OnInit {
         break;
       case 'reverseGeolocation':
         this.reverse();
+        break;
+      case 'itinerary':
+        this.calculateIt();
         break;
     }
   };
@@ -62,6 +73,18 @@ export class MapSettingsComponent implements OnInit {
     return this.settingsForm.value.reverseLatitude;
   };
 
+  getOrigin = (): string => {
+    return this.settingsForm.value.origin;
+  };
+
+  getDestination = (): string => {
+    return this.settingsForm.value.destination;
+  };
+
+  getTransport = (): string => {
+    return this.settingsForm.value.transportType;
+  };
+
   geolocalize = (): void => {
     this.geoService.getCoordinatesFromAddress(
       `https://api-adresse.data.gouv.fr/search?q=${this.getGeoAddress()}&limit=1`)
@@ -80,6 +103,16 @@ export class MapSettingsComponent implements OnInit {
       .subscribe((coords) => {
         this.reverseAddress = coords.address;
         this.geoService.setPoint(coords.features);
+      });
+  }
+
+  calculateIt = (): void => {
+    this.geoService.getIti(
+      `http://wxs.ign.fr/choisirgeoportail/itineraire/rest/route.json?origin=${this.getOrigin()}&destination=${this.getDestination()}&method=DISTANCE&graphName=${this.getTransport()}`
+    ).subscribe((itinerary) => {
+        this.distance = itinerary.distance;
+        this.duration = itinerary.duration;
+        this.geoService.setIti(itinerary.wkt);
       });
   }
 }

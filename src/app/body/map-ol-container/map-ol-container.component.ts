@@ -21,6 +21,7 @@ import { Subscription } from 'rxjs';
 import CircleStyle from 'ol/style/Circle';
 import { Fill, Stroke } from 'ol/style';
 import Style from 'ol/style/Style';
+import { WKT } from 'ol/format';
 
 @Component({
   selector: 'app-map-container',
@@ -31,10 +32,11 @@ export class MapOlContainerComponent implements OnInit, OnDestroy {
   private readonly ignKey = 'choisirgeoportail';
   private map?: Map;
   private view?: View;
-  private sub: Subscription;
+  private subGeo: Subscription;
+  private subIti: Subscription;
 
   constructor(private geoService: GeolocationService) {
-    this.sub = this.geoService.onPointSet().subscribe((point) => {
+    this.subGeo = this.geoService.onPointSet().subscribe((point) => {
       this.map?.getLayers().getArray()
         .filter(layer => layer.get('title') === 'point')
         .forEach(layer => this.map?.removeLayer(layer));
@@ -69,7 +71,6 @@ export class MapOlContainerComponent implements OnInit, OnDestroy {
         source: vectorSource,
         style: styleFunction
       });
-      console.log(vectorLayer);
       this.map?.addLayer(vectorLayer);
 
       const feature = vectorSource.getFeatures()[0];
@@ -79,10 +80,37 @@ export class MapOlContainerComponent implements OnInit, OnDestroy {
       // @ts-ignore
       this.view?.fit(target, { padding: [50, 50, 50, 50], minResolution: 3 });
     });
+
+    this.subIti = this.geoService.onitiSet().subscribe((iti) => {
+      this.map?.getLayers().getArray()
+        .filter(layer => layer.get('title') === 'itinerary')
+        .forEach(layer => this.map?.removeLayer(layer));
+      console.log(iti);
+      const format = new WKT();
+      const feature = format.readFeature(iti, {
+        dataProjection: 'EPSG:4326',
+        featureProjection: 'EPSG:3857',
+      });
+      const vectorSource = new Vector({ features: [feature] });
+      const vectorLayer = new VectorLayer({
+        // @ts-ignore
+        title: 'itinerary',
+        source: vectorSource,
+        style: new Style({
+          stroke: new Stroke({
+            color: 'rgba(0,0,0,0.7)',
+            width: 3,
+          }),
+        }),
+      });
+      this.map?.addLayer(vectorLayer);
+      this.view?.fit(vectorSource.getExtent(), { padding: [50, 50, 50, 50], minResolution: 3 });
+    });
   }
 
   ngOnDestroy(): void {
-    this.sub?.unsubscribe();
+    this.subGeo?.unsubscribe();
+    this.subIti?.unsubscribe();
   }
 
   private go = (): void => {
