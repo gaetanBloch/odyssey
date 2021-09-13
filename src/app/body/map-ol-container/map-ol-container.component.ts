@@ -22,6 +22,7 @@ import CircleStyle from 'ol/style/Circle';
 import { Fill, Stroke } from 'ol/style';
 import Style from 'ol/style/Style';
 import { WKT } from 'ol/format';
+import { ItineraryService } from '../../services/itinerary.service';
 
 @Component({
   selector: 'app-map-container',
@@ -32,11 +33,14 @@ export class MapOlContainerComponent implements OnInit, OnDestroy {
   private readonly ignKey = 'choisirgeoportail';
   private map?: Map;
   private view?: View;
-  private subGeo: Subscription;
-  private subIti: Subscription;
+  private subGeolocation: Subscription;
+  private subItinerary: Subscription;
 
-  constructor(private geoService: GeolocationService) {
-    this.subGeo = this.geoService.onPointSet().subscribe((point) => {
+  constructor(
+    private geoService: GeolocationService,
+    private itineraryService: ItineraryService
+  ) {
+    this.subGeolocation = this.geoService.onPointSet().subscribe((point) => {
       this.map?.getLayers().getArray()
         .filter(layer => layer.get('title') === 'point')
         .forEach(layer => this.map?.removeLayer(layer));
@@ -81,7 +85,7 @@ export class MapOlContainerComponent implements OnInit, OnDestroy {
       this.view?.fit(target, { padding: [50, 50, 50, 50], minResolution: 3 });
     });
 
-    this.subIti = this.geoService.onitiSet().subscribe((iti) => {
+    this.subItinerary = this.itineraryService.onItinerarySet().subscribe((iti) => {
       this.map?.getLayers().getArray()
         .filter(layer => layer.get('title') === 'itinerary')
         .forEach(layer => this.map?.removeLayer(layer));
@@ -109,8 +113,8 @@ export class MapOlContainerComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subGeo?.unsubscribe();
-    this.subIti?.unsubscribe();
+    this.subGeolocation?.unsubscribe();
+    this.subItinerary?.unsubscribe();
   }
 
   private go = (): void => {

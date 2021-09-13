@@ -3,14 +3,12 @@ import { Coordinates } from '../types/Coordinates';
 import { HttpClient } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Itinerary } from '../types/Itinerary';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GeolocationService {
   private currentPoint = new Subject<any>();
-  private iti = new Subject<any>();
 
   constructor(private http: HttpClient) {
   }
@@ -40,17 +38,6 @@ export class GeolocationService {
       }))
   }
 
-  public getIti = (getRequest: string): Observable<Itinerary> => {
-    return this.http.get<any>(getRequest).pipe(map((data) => {
-        console.log(data);
-        return {
-          wkt: data.geometryWkt,
-          distance: data.distance,
-          duration: data.duration
-        };
-      }))
-  }
-
   public setPoint = (point: any): void => {
     console.log(point);
     this.currentPoint.next(point);
@@ -58,15 +45,6 @@ export class GeolocationService {
 
   public onPointSet = (): Observable<any> => {
     return this.currentPoint.asObservable();
-  }
-
-  public setIti = (wkt: any): void => {
-    console.log(wkt);
-    this.iti.next(wkt);
-  }
-
-  public onitiSet = (): Observable<any> => {
-    return this.iti.asObservable();
   }
 }
 

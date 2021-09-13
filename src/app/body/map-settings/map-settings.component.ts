@@ -3,6 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { FeatureType } from '../../types/FeatureType';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GeolocationService } from '../../services/geolocation.service';
+import { ItineraryService } from '../../services/itinerary.service';
 
 @Component({
   selector: 'app-map-settings',
@@ -27,9 +28,9 @@ export class MapSettingsComponent implements OnInit {
   home = true
 
   constructor(
-    private route: ActivatedRoute,
     private router: Router,
-    private geoService: GeolocationService
+    private geoService: GeolocationService,
+    private itineraryService: ItineraryService
   ) {
   }
 
@@ -52,38 +53,24 @@ export class MapSettingsComponent implements OnInit {
         this.reverse();
         break;
       case 'itinerary':
-        this.calculateIt();
+        this.calculateItinerary();
         break;
     }
   };
 
-  getFeatureType = (): string => {
-    return this.settingsForm.value.featureType;
-  };
+  getFeatureType = () => this.getSettings('featureType');
 
-  getGeoAddress = (): string => {
-    return this.settingsForm.value.geoAddress;
-  };
+  getGeoAddress = () => this.getSettings('geoAddress');
 
-  getReverseLon = (): string => {
-    return this.settingsForm.value.reverseLongitude;
-  };
+  getReverseLon = () => this.getSettings('reverseLongitude');
 
-  getReverseLat = (): string => {
-    return this.settingsForm.value.reverseLatitude;
-  };
+  getReverseLat = () => this.getSettings('reverseLatitude');
 
-  getOrigin = (): string => {
-    return this.settingsForm.value.origin;
-  };
+  getOrigin = () => this.getSettings('origin');
 
-  getDestination = (): string => {
-    return this.settingsForm.value.destination;
-  };
+  getDestination = () => this.getSettings('destination');
 
-  getTransport = (): string => {
-    return this.settingsForm.value.transportType;
-  };
+  getTransport = () => this.getSettings('transportType');
 
   geolocalize = (): void => {
     this.geoService.getCoordinatesFromAddress(
@@ -106,13 +93,17 @@ export class MapSettingsComponent implements OnInit {
       });
   }
 
-  calculateIt = (): void => {
-    this.geoService.getIti(
-      `http://wxs.ign.fr/choisirgeoportail/itineraire/rest/route.json?origin=${this.getOrigin()}&destination=${this.getDestination()}&method=DISTANCE&graphName=${this.getTransport()}`
+  calculateItinerary = (): void => {
+    this.itineraryService.getItinerary(
+      `https://wxs.ign.fr/choisirgeoportail/itineraire/rest/route.json?origin=${this.getOrigin()}&destination=${this.getDestination()}&method=DISTANCE&graphName=${this.getTransport()}`
     ).subscribe((itinerary) => {
         this.distance = itinerary.distance;
         this.duration = itinerary.duration;
-        this.geoService.setIti(itinerary.wkt);
+        this.itineraryService.setItinerary(itinerary.wkt);
       });
+  }
+
+  private getSettings(value: string): string {
+    return this.settingsForm.value[value];
   }
 }
