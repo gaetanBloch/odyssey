@@ -16,13 +16,13 @@ import LayerSwitcher from 'ol-ext/control/LayerSwitcher';
 import { applyStyle } from 'ol-mapbox-style';
 // @ts-ignore
 import * as Gp from 'geoportal-extensions-openlayers';
+
 import { GeolocationService } from '../../services/geolocation.service';
-import { Subscription } from 'rxjs';
-import CircleStyle from 'ol/style/Circle';
-import { Fill, Stroke } from 'ol/style';
-import Style from 'ol/style/Style';
-import { WKT } from 'ol/format';
 import { ItineraryService } from '../../services/itinerary.service';
+import { Subject, Subscription } from 'rxjs';
+import { Fill, Stroke, Circle, Style } from 'ol/style';
+import { WKT } from 'ol/format';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-map-container',
@@ -33,19 +33,22 @@ export class MapOlContainerComponent implements OnInit, OnDestroy {
   private readonly ignKey = 'choisirgeoportail';
   private map?: Map;
   private view?: View;
-  private subGeolocation: Subscription;
-  private subItinerary: Subscription;
+
+  // Subject for unsubscription
+  private readonly $destroy = new Subject();
 
   constructor(
     private geoService: GeolocationService,
     private itineraryService: ItineraryService
   ) {
-    this.subGeolocation = this.geoService.onPointSet().subscribe((point) => {
+
+    this.geoService.onPointSet()
+      .pipe(takeUntil(this.$destroy))
+      .subscribe((point) => {
       this.map?.getLayers().getArray()
         .filter(layer => layer.get('title') === 'point')
         .forEach(layer => this.map?.removeLayer(layer));
-      console.log(point);
-      const image = new CircleStyle({
+      const image = new Circle({
         radius: 7,
         fill: new Fill({ color: 'rgba(0,0,0,0.6)' }),
         stroke: new Stroke({ color: 'rgba(0,0,0,0.6)', width: 1 })
@@ -85,13 +88,14 @@ export class MapOlContainerComponent implements OnInit, OnDestroy {
       this.view?.fit(target, { padding: [50, 50, 50, 50], minResolution: 3 });
     });
 
-    this.subItinerary = this.itineraryService.onItinerarySet().subscribe((iti) => {
+    this.itineraryService.onItinerarySet()
+      .pipe(takeUntil(this.$destroy))
+      .subscribe((itinerary) => {
       this.map?.getLayers().getArray()
         .filter(layer => layer.get('title') === 'itinerary')
         .forEach(layer => this.map?.removeLayer(layer));
-      console.log(iti);
       const format = new WKT();
-      const feature = format.readFeature(iti, {
+      const feature = format.readFeature(itinerary, {
         dataProjection: 'EPSG:4326',
         featureProjection: 'EPSG:3857',
       });
@@ -108,16 +112,15 @@ export class MapOlContainerComponent implements OnInit, OnDestroy {
         }),
       });
       this.map?.addLayer(vectorLayer);
-      this.view?.fit(vectorSource.getExtent(), { padding: [50, 50, 50, 50], minResolution: 3 });
+      this.view?.fit(
+        vectorSource.getExtent(),
+        { padding: [50, 50, 50, 50], minResolution: 3 }
+      );
     });
   }
 
-  ngOnDestroy(): void {
-    this.subGeolocation?.unsubscribe();
-    this.subItinerary?.unsubscribe();
-  }
-
-  private go = (): void => {
+  // Display MapLayers
+  private displayLayers = (): void => {
     const lsControl = new LayerSwitcher({
       collapsed: true,
       reordering: false,
@@ -174,6 +177,7 @@ export class MapOlContainerComponent implements OnInit, OnDestroy {
     })().catch(console.error);
   };
 
+  // Init component
   ngOnInit(): void {
     this.view = new View({
       center: [287963, 5948655],
@@ -201,7 +205,13 @@ export class MapOlContainerComponent implements OnInit, OnDestroy {
     Gp.Services.getConfig({
       // Or download the file from https://ignf.github.io/geoportal-access-lib/latest/jsdoc/tutorial-optimize-getconfig.html
       apiKey: this.ignKey,
-      onSuccess: this.go
+      onSuccess: this.displayLayers
     });
+  }
+
+  ngOnDestroy(): void {
+    // Unsubscriptions
+    this.$destroy.next();
+    this.$destroy.complete();
   }
 }
