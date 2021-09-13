@@ -286,3 +286,5 @@ packages/react-devtools-scheduling-profiler/dist
 npm-debug.log*
 
 target
+
+.firebase
