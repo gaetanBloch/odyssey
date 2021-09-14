@@ -7,7 +7,7 @@ import { MapOlContainerModule } from './map-ol-container/map-ol-container.module
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '../material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { FileUploaderComponent } from './file-uploader/file-uploader.component';
+import { FileUploaderComponent } from '../components/file-uploader/file-uploader.component';
 
 @NgModule({
   imports: [

@@ -17,7 +17,6 @@ export class GeolocationService {
     Observable<Coordinates> => {
     return this.http.get<any>(getRequest)
       .pipe(map((data) => {
-        console.log(data);
         return {
           longitude: data.features[0].geometry.coordinates[0],
           latitude: data.features[0].geometry.coordinates[1],
@@ -30,7 +29,6 @@ export class GeolocationService {
     Observable<Coordinates> => {
     return this.http.get<any>(getRequest)
       .pipe(map((data) => {
-        console.log(data);
         return {
           address: data.features[0].properties.label,
           features: data

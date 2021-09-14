@@ -1,14 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 import { Map, View } from 'ol';
 import { createXYZ } from 'ol/tilegrid';
-import MVT from 'ol/format/MVT';
-import VectorTileLayer from 'ol/layer/VectorTile';
-import TileLayer from 'ol/layer/Tile';
-import VectorTileSource from 'ol/source/VectorTile';
-import GeoJSON from 'ol/format/GeoJSON';
-import { OSM, Vector } from 'ol/source';
-import VectorLayer from 'ol/layer/Vector';
+import { MVT, GeoJSON, WKT } from 'ol/format';
+import { VectorTile, Tile, Vector as VectorLayer } from 'ol/layer';
+import { OSM, Vector, VectorTile as VectorTileSource } from 'ol/source';
+import { Fill, Stroke, Circle, Style } from 'ol/style';
 
 // @ts-ignore
 import LayerSwitcher from 'ol-ext/control/LayerSwitcher';
@@ -19,10 +18,6 @@ import * as Gp from 'geoportal-extensions-openlayers';
 
 import { GeolocationService } from '../../services/geolocation.service';
 import { ItineraryService } from '../../services/itinerary.service';
-import { Subject, Subscription } from 'rxjs';
-import { Fill, Stroke, Circle, Style } from 'ol/style';
-import { WKT } from 'ol/format';
-import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-map-container',
@@ -129,7 +124,7 @@ export class MapOlContainerComponent implements OnInit, OnDestroy {
     this.map?.addControl(lsControl);
 
     // OpenStreetMap Layer
-    const osmLayer = new TileLayer({
+    const osmLayer = new Tile({
       // @ts-ignore
       title: 'Raster OSM',
       baseLayer: true,
@@ -138,7 +133,7 @@ export class MapOlContainerComponent implements OnInit, OnDestroy {
     this.map?.addLayer(osmLayer);
 
     // IGN Vector Layer
-    const ignOLLayer = new VectorTileLayer({
+    const ignOLLayer = new VectorTile({
       // @ts-ignore
       title: 'Vector IGN',
       baseLayer: true,
@@ -184,17 +179,7 @@ export class MapOlContainerComponent implements OnInit, OnDestroy {
       zoom: 6,
       constrainResolution: true,
       maxZoom: 22,
-      minZoom: 0,
-      resolutions: [
-        156543.033928041, 78271.51696402048, 39135.758482010235,
-        19567.87924100512, 9783.93962050256, 4891.96981025128,
-        2445.98490512564, 1222.99245256282, 611.49622628141,
-        305.7481131407048, 152.8740565703525, 76.43702828517624,
-        38.21851414258813, 19.10925707129406, 9.554628535647032,
-        4.777314267823516, 2.388657133911758, 1.194328566955879,
-        0.5971642834779395, 0.2985821417389697, 0.1492910708694849,
-        0.0746455354347424
-      ]
+      minZoom: 0
     });
     this.map = new Map({
       target: 'map',

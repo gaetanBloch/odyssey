@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { FeatureType } from '../../types/FeatureType';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { GeolocationService } from '../../services/geolocation.service';
 import { ItineraryService } from '../../services/itinerary.service';
 
