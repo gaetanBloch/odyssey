@@ -23,24 +23,21 @@
   },
   "features": {
     "ol": {
-      "geolocation": {
-        "ban": {
+      "geolocation": [{
           "title": "BAN",
           "default": true,
           "method": "GET",
           "requestUrl": "https://api-adresse.data.gouv.fr/search?q={{address}}&limit=1"
-        }
+        }]
       },
-      "reverseGeolocation": {
-        "ban": {
+      "reverseGeolocation": [{
           "title": "BAN",
           "default": true,
           "method": "GET",
           "requestUrl": "https://api-adresse.data.gouv.fr/reverse?lon={{lon}}&lat={{lat}}"
-        }
+        }]
       },
-      "itinerary": {
-        "ban": {
+      "itinerary": [{
           "title": "IGN",
           "default": true,
           "method": "GET",
@@ -49,7 +46,7 @@
           "drawField": "geometryWkt",
           "distanceField": "distance",
           "durationFiled": "duration"
-        }
+        }]
       }
     }
   }
