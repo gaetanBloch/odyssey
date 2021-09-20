@@ -25,8 +25,8 @@ export class FileUploaderComponent {
       if (fileElement.files === null) return;
       // We're taking the one and only file
       this.file = fileElement.files[0];
+      this.emitFile();
     };
-    this.emitFile();
     // Clear the file input cache
     fileElement.click();
   }

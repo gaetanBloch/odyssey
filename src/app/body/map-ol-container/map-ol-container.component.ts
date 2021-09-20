@@ -78,8 +78,6 @@ export class MapOlContainerComponent implements OnInit, OnDestroy {
       const feature = vectorSource.getFeatures()[0];
       const target = feature.getGeometry();
       // @ts-ignore
-      console.log(target.getCoordinates());
-      // @ts-ignore
       this.view?.fit(target, { padding: [50, 50, 50, 50], minResolution: 3 });
     });
 

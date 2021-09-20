@@ -3,7 +3,6 @@ import { Coordinates } from '../types/Coordinates';
 import { HttpClient } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Settings } from '../types/Settings';
 
 @Injectable({
   providedIn: 'root'
@@ -14,10 +13,12 @@ export class GeolocationService {
   constructor(private http: HttpClient) {
   }
 
-  public getCoordinatesFromAddress = (getRequest: string, settings: Settings):
+  public getCoordinatesFromAddress = (getRequest: string):
     Observable<Coordinates> => {
     return this.http.get<any>(getRequest)
       .pipe(map((data) => {
+        if(!data.features.length)
+          throw new Error("No result was found for request: " + getRequest)
         return {
           longitude: data.features[0].geometry.coordinates[0],
           latitude: data.features[0].geometry.coordinates[1],
@@ -30,6 +31,8 @@ export class GeolocationService {
     Observable<Coordinates> => {
     return this.http.get<any>(getRequest)
       .pipe(map((data) => {
+        if(!data.features.length)
+          throw new Error("No result was found for request: " + getRequest)
         return {
           address: data.features[0].properties.label,
           features: data
@@ -38,7 +41,6 @@ export class GeolocationService {
   }
 
   public setPoint = (point: any): void => {
-    console.log(point);
     this.currentPoint.next(point);
   }
 

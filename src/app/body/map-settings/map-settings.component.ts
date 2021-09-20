@@ -4,10 +4,9 @@ import { FeatureType } from '../../types/FeatureType';
 import { Router } from '@angular/router';
 import { GeolocationService } from '../../services/geolocation.service';
 import { ItineraryService } from '../../services/itinerary.service';
-import { SettingsParserService } from '../../services/settings-parser.service';
-import { Settings } from '../../types/Settings';
 
-import settings from '../../../assets/default-settings.json';
+import secrets from '../../../assets/default-secrets.json';
+import { SecretsConstants } from '../../types/SecretsConstants';
 
 @Component({
   selector: 'app-map-settings',
@@ -31,19 +30,18 @@ export class MapSettingsComponent implements OnInit {
   duration? = ' ';
   home = true
 
-  settings?: Settings;
+  secrets?: any;
 
   constructor(
     private router: Router,
     private geoService: GeolocationService,
     private itineraryService: ItineraryService,
-    private settingsParser: SettingsParserService,
   ) {
   }
 
   ngOnInit(): void {
     this.home = this.router.url === '/';
-    this.settings = this.settingsParser.resolveSecrets(settings);
+    this.secrets = secrets;
   }
 
   // Getting all values of Feature enum
@@ -81,16 +79,13 @@ export class MapSettingsComponent implements OnInit {
   getTransport = () => this.getSettings('transportType');
 
   geolocalize = (): void => {
-    const request = this.settingsParser.resolveVariables(
-      settings.features.ol.geolocation[0].requestUrl,
-      { address: this.getGeoAddress() }
-    );
-    this.geoService.getCoordinatesFromAddress(request, settings)
+    const request = `https://api-adresse.data.gouv.fr/search?q=${this.getGeoAddress()}&limit=1`;
+    this.geoService.getCoordinatesFromAddress(request)
       .subscribe((coords) => {
         this.geoLongitude = coords.longitude;
         this.geoLatitude = coords.latitude;
         this.geoService.setPoint(coords.features);
-      });
+      }, (error) => alert(error.message));
   }
 
   reverse = (): void => {
@@ -101,20 +96,33 @@ export class MapSettingsComponent implements OnInit {
       .subscribe((coords) => {
         this.reverseAddress = coords.address;
         this.geoService.setPoint(coords.features);
-      });
+      }, (error) => alert(error.message));
   }
 
   calculateItinerary = (): void => {
     this.itineraryService.getItinerary(
-      `https://wxs.ign.fr/choisirgeoportail/itineraire/rest/route.json?origin=${this.getOrigin()}&destination=${this.getDestination()}&method=DISTANCE&graphName=${this.getTransport()}`
-    ).subscribe((itinerary) => {
+      `https://wxs.ign.fr/${this.secrets[SecretsConstants.ignKey]}/itineraire/rest/route.json?origin=${this.getOrigin()}&destination=${this.getDestination()}&method=DISTANCE&graphName=${this.getTransport()}`
+    ).subscribe(
+      (itinerary) => {
         this.distance = itinerary.distance;
         this.duration = itinerary.duration;
         this.itineraryService.setItinerary(itinerary.wkt);
-      });
+      }, (error) => alert(error.message)
+    );
   }
 
   private getSettings(value: string): string {
     return this.settingsForm.value[value];
+  }
+
+  onSecretsUploaded = (file: File): void => {
+    if(!file) return;
+    // Read secrets file uploaded
+    const fileReader = new FileReader();
+    fileReader.onload = (e) => {
+      // @ts-ignore
+      this.secrets = JSON.parse(fileReader.result);
+    }
+    fileReader.readAsText(file);
   }
 }
