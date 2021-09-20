@@ -3,6 +3,7 @@ import { Coordinates } from '../types/Coordinates';
 import { HttpClient } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { Settings } from '../types/Settings';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ export class GeolocationService {
   constructor(private http: HttpClient) {
   }
 
-  public getCoordinatesFromAddress = (getRequest: string):
+  public getCoordinatesFromAddress = (getRequest: string, settings: Settings):
     Observable<Coordinates> => {
     return this.http.get<any>(getRequest)
       .pipe(map((data) => {

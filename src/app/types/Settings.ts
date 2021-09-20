@@ -1,5 +1,5 @@
 export interface Settings {
-  secrets: Map<string, string>,
+  secrets: any,
   maps: Maps,
   features: Features,
 }

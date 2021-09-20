@@ -4,6 +4,10 @@ import { FeatureType } from '../../types/FeatureType';
 import { Router } from '@angular/router';
 import { GeolocationService } from '../../services/geolocation.service';
 import { ItineraryService } from '../../services/itinerary.service';
+import { SettingsParserService } from '../../services/settings-parser.service';
+import { Settings } from '../../types/Settings';
+
+import settings from '../../../assets/default-settings.json';
 
 @Component({
   selector: 'app-map-settings',
@@ -27,15 +31,19 @@ export class MapSettingsComponent implements OnInit {
   duration? = ' ';
   home = true
 
+  settings?: Settings;
+
   constructor(
     private router: Router,
     private geoService: GeolocationService,
-    private itineraryService: ItineraryService
+    private itineraryService: ItineraryService,
+    private settingsParser: SettingsParserService,
   ) {
   }
 
   ngOnInit(): void {
     this.home = this.router.url === '/';
+    this.settings = this.settingsParser.resolveSecrets(settings);
   }
 
   // Getting all values of Feature enum
@@ -73,8 +81,11 @@ export class MapSettingsComponent implements OnInit {
   getTransport = () => this.getSettings('transportType');
 
   geolocalize = (): void => {
-    this.geoService.getCoordinatesFromAddress(
-      `https://api-adresse.data.gouv.fr/search?q=${this.getGeoAddress()}&limit=1`)
+    const request = this.settingsParser.resolveVariables(
+      settings.features.ol.geolocation[0].requestUrl,
+      { address: this.getGeoAddress() }
+    );
+    this.geoService.getCoordinatesFromAddress(request, settings)
       .subscribe((coords) => {
         this.geoLongitude = coords.longitude;
         this.geoLatitude = coords.latitude;

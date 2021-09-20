@@ -19,7 +19,9 @@
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "lib": ["es2018", "dom"],
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true
   },
   "angularCompilerOptions": {
     "strictInjectionParameters": true,

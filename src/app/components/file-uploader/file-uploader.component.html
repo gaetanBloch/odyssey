@@ -1,6 +1,6 @@
 <div class='uploader'>
   <span *ngIf='file' class='uploader__file-name'>
-    {{ file.name }}
+    {{ file?.name }}
   </span>
   <button class='uploader__button'
           (click)='onClick()'
