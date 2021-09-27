@@ -21,8 +21,9 @@ export class GeolocationService {
     Observable<Coordinates> => {
     return this.http.get<any>(getRequest)
       .pipe(map((data) => {
-        if(!data.features.length)
-          throw new Error("No result was found for request: " + getRequest)
+        if(!data.features.length) {
+          throw new Error("No result was found for request: " + getRequest);
+        }
         const geolocation = settings.features.ol.geolocation[0];
         return {
           longitude: jp.query(data, '$' + geolocation.longitudeFieldPath)[0],
@@ -32,15 +33,17 @@ export class GeolocationService {
       }))
   }
 
-  public getAddressFromCoordinates = (getRequest: string):
+  public getAddressFromCoordinates = (getRequest: string, settings: Settings):
     Observable<Coordinates> => {
     return this.http.get<any>(getRequest)
       .pipe(map((data) => {
-        if(!data.features.length)
+        if(!data.features.length) {
           throw new Error("No result was found for request: " + getRequest)
+        }
+        const reverse = settings.features.ol.reverseGeolocation[0];
         return {
-          address: data.features[0].properties.label,
-          features: data
+          address: jp.query(data, '$' + reverse.addressFieldPath)[0],
+          features: jp.query(data, '$' + reverse.featuresFieldPath)[0],
         };
       }))
   }

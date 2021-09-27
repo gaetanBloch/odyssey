@@ -97,10 +97,14 @@ export class MapSettingsComponent implements OnInit {
   }
 
   reverse = (): void => {
-    const lon = this.getReverseLon() ? this.getReverseLon() : 2.347;
-    const lat = this.getReverseLat() ? this.getReverseLat() : 48.859;
-    this.geoService.getAddressFromCoordinates(
-      `https://api-adresse.data.gouv.fr/reverse?lon=${lon}&lat=${lat}`)
+    const values = new Map<string, string>();
+    values.set('lon', this.getReverseLon() ? this.getReverseLon() : '2.347');
+    values.set('lat', this.getReverseLat() ? this.getReverseLat() : '48.859');
+    const request = this.settingsParser.resolveVariables(
+      this.settingsParser.getSettings().features.ol.reverseGeolocation[0].requestUrl,
+      values
+    );
+    this.geoService.getAddressFromCoordinates(request, this.settingsParser.getSettings())
       .subscribe((coords) => {
         this.reverseAddress = coords.address;
         this.geoService.setPoint(coords.features);

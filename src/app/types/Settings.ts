@@ -37,6 +37,8 @@ interface Features {
       title: string,
       default?: boolean,
       method: string,
+      addressFieldPath: string,
+      featuresFieldPath: string,
       requestUrl: string,
     }>,
     itinerary: Array<{

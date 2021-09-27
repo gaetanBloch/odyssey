@@ -33,6 +33,8 @@
         "title": "BAN",
         "default": true,
         "method": "GET",
+        "addressFieldPath": ".features[0].properties.label",
+        "featuresFieldPath": "",
         "requestUrl": "https://api-adresse.data.gouv.fr/reverse?lon={{lon}}&lat={{lat}}"
       }],
       "itinerary": [{
