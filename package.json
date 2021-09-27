@@ -51,6 +51,7 @@
     "core-js": "^3.16.4",
     "express": "^4.17.1",
     "geoportal-extensions-openlayers": "^3.1.0",
+    "jsonpath": "^1.1.1",
     "ol": "^6.6.1",
     "ol-ext": "^3.2.6",
     "ol-mapbox-style": "^6.4.1",

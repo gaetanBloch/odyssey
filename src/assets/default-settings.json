@@ -1,0 +1,50 @@
+{
+  "maps": {
+    "ol": {
+      "ignVector" : {
+        "title": "IGN Vector",
+        "default": true,
+        "type": "vector",
+        "format": "mvt",
+        "tileUrl": "https://wxs.ign.fr/((IGN_KEY))/geoportail/tms/1.0.0/PLAN.IGN/{z}/{x}/{y}.pbf",
+        "styleUrl": "https://wxs.ign.fr/((IGN_KEY))/static/vectorTiles/styles/PLAN.IGN/standard.json",
+        "attributions": [
+          "<a href=\"https://geoservices.ign.fr/documentation/geoservices/vecteur-tuile.html\">© IGN Geoportal</a></br>"
+        ]
+      },
+      "osmRaster": {
+        "title": "OSM Raster",
+        "default": true
+      }
+    }
+  },
+  "features": {
+    "ol": {
+      "geolocation": [{
+        "title": "BAN",
+        "default": true,
+        "method": "GET",
+        "longitudeFieldPath": ".features[0].geometry.coordinates[0]",
+        "latitudeFieldPath": ".features[0].geometry.coordinates[1]",
+        "featuresFieldPath": "",
+        "requestUrl": "https://api-adresse.data.gouv.fr/search?q={{address}}&limit=1"
+      }],
+      "reverseGeolocation": [{
+        "title": "BAN",
+        "default": true,
+        "method": "GET",
+        "requestUrl": "https://api-adresse.data.gouv.fr/reverse?lon={{lon}}&lat={{lat}}"
+      }],
+      "itinerary": [{
+        "title": "IGN",
+        "default": true,
+        "method": "GET",
+        "requestUrl": "https://wxs.ign.fr/((IGN_KEY))/itineraire/rest/route.json?origin={{origin}}&destination={{destination}}&method={{method}}&graphName={{locomotion}}",
+        "format": "wkt",
+        "drawField": "geometryWkt",
+        "distanceField": "distance",
+        "durationField": "duration"
+      }]
+    }
+  }
+}

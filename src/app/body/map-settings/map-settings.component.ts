@@ -7,6 +7,7 @@ import { ItineraryService } from '../../services/itinerary.service';
 
 import secrets from '../../../assets/default-secrets.json';
 import { SecretsConstants } from '../../types/SecretsConstants';
+import { SettingsParserService } from '../../services/settings-parser.service';
 
 @Component({
   selector: 'app-map-settings',
@@ -36,6 +37,7 @@ export class MapSettingsComponent implements OnInit {
     private router: Router,
     private geoService: GeolocationService,
     private itineraryService: ItineraryService,
+    private settingsParser: SettingsParserService,
   ) {
   }
 
@@ -79,8 +81,14 @@ export class MapSettingsComponent implements OnInit {
   getTransport = () => this.getSettings('transportType');
 
   geolocalize = (): void => {
-    const request = `https://api-adresse.data.gouv.fr/search?q=${this.getGeoAddress()}&limit=1`;
-    this.geoService.getCoordinatesFromAddress(request)
+    const values = new Map<string, string>();
+    values.set('address', this.getGeoAddress());
+    const request = this.settingsParser.resolveVariables(
+      this.settingsParser.getSettings().features.ol.geolocation[0].requestUrl,
+      values
+    );
+    // const request = `https://api-adresse.data.gouv.fr/search?q=${this.getGeoAddress()}&limit=1`;
+    this.geoService.getCoordinatesFromAddress(request, this.settingsParser.getSettings())
       .subscribe((coords) => {
         this.geoLongitude = coords.longitude;
         this.geoLatitude = coords.latitude;
