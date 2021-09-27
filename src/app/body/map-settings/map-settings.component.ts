@@ -5,8 +5,6 @@ import { Router } from '@angular/router';
 import { GeolocationService } from '../../services/geolocation.service';
 import { ItineraryService } from '../../services/itinerary.service';
 
-import secrets from '../../../assets/default-secrets.json';
-import { SecretsConstants } from '../../types/SecretsConstants';
 import { SettingsParserService } from '../../services/settings-parser.service';
 
 @Component({
@@ -23,6 +21,7 @@ export class MapSettingsComponent implements OnInit {
     origin: new FormControl('-0.67561,45.87869'),
     destination: new FormControl('-0.24465,46.01524'),
     transportType: new FormControl('voiture'),
+    transportMethod: new FormControl('time'),
   });
   geoLongitude? = ' ';
   geoLatitude? = ' ';
@@ -30,8 +29,6 @@ export class MapSettingsComponent implements OnInit {
   distance? = ' ';
   duration? = ' ';
   home = true
-
-  secrets?: any;
 
   constructor(
     private router: Router,
@@ -43,7 +40,6 @@ export class MapSettingsComponent implements OnInit {
 
   ngOnInit(): void {
     this.home = this.router.url === '/';
-    this.secrets = secrets;
   }
 
   // Getting all values of Feature enum
@@ -80,6 +76,8 @@ export class MapSettingsComponent implements OnInit {
 
   getTransport = () => this.getSettings('transportType');
 
+  getMethod = () => this.getSettings('transportMethod');
+
   geolocalize = (): void => {
     const values = new Map<string, string>();
     values.set('address', this.getGeoAddress());
@@ -87,8 +85,7 @@ export class MapSettingsComponent implements OnInit {
       this.settingsParser.getSettings().features.ol.geolocation[0].requestUrl,
       values
     );
-    // const request = `https://api-adresse.data.gouv.fr/search?q=${this.getGeoAddress()}&limit=1`;
-    this.geoService.getCoordinatesFromAddress(request, this.settingsParser.getSettings())
+    this.geoService.getCoordinatesFromAddress(request)
       .subscribe((coords) => {
         this.geoLongitude = coords.longitude;
         this.geoLatitude = coords.latitude;
@@ -104,7 +101,7 @@ export class MapSettingsComponent implements OnInit {
       this.settingsParser.getSettings().features.ol.reverseGeolocation[0].requestUrl,
       values
     );
-    this.geoService.getAddressFromCoordinates(request, this.settingsParser.getSettings())
+    this.geoService.getAddressFromCoordinates(request)
       .subscribe((coords) => {
         this.reverseAddress = coords.address;
         this.geoService.setPoint(coords.features);
@@ -112,9 +109,17 @@ export class MapSettingsComponent implements OnInit {
   }
 
   calculateItinerary = (): void => {
-    this.itineraryService.getItinerary(
-      `https://wxs.ign.fr/${this.secrets[SecretsConstants.ignKey]}/itineraire/rest/route.json?origin=${this.getOrigin()}&destination=${this.getDestination()}&method=DISTANCE&graphName=${this.getTransport()}`
-    ).subscribe(
+    const values = new Map<string, string>();
+    values.set('origin', this.getOrigin());
+    values.set('destination', this.getDestination());
+    values.set('method', this.getMethod());
+    values.set('locomotion', this.getTransport());
+    const request = this.settingsParser.resolveVariables(
+      this.settingsParser.getSettings().features.ol.itinerary[0].requestUrl,
+      values
+    );
+    this.itineraryService.getItinerary(request)
+      .subscribe(
       (itinerary) => {
         this.distance = itinerary.distance;
         this.duration = itinerary.duration;

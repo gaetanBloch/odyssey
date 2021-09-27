@@ -3,10 +3,10 @@ import { Coordinates } from '../types/Coordinates';
 import { HttpClient } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Settings } from '../types/Settings';
 
 // @ts-ignore
 import jp from 'jsonpath'
+import { SettingsParserService } from './settings-parser.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,17 +14,17 @@ import jp from 'jsonpath'
 export class GeolocationService {
   private currentPoint = new Subject<any>();
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private settingsService: SettingsParserService) {
   }
 
-  public getCoordinatesFromAddress = (getRequest: string, settings: Settings):
+  public getCoordinatesFromAddress = (request:string):
     Observable<Coordinates> => {
-    return this.http.get<any>(getRequest)
+    const geolocation = this.settingsService.getSettings().features.ol.geolocation[0];
+    return this.http.get<any>(request)
       .pipe(map((data) => {
         if(!data.features.length) {
-          throw new Error("No result was found for request: " + getRequest);
+          throw new Error("No result was found for request: " + request);
         }
-        const geolocation = settings.features.ol.geolocation[0];
         return {
           longitude: jp.query(data, '$' + geolocation.longitudeFieldPath)[0],
           latitude: jp.query(data, '$' + geolocation.latitudeFieldPath)[0],
@@ -33,14 +33,14 @@ export class GeolocationService {
       }))
   }
 
-  public getAddressFromCoordinates = (getRequest: string, settings: Settings):
+  public getAddressFromCoordinates = (request:string):
     Observable<Coordinates> => {
-    return this.http.get<any>(getRequest)
+    const reverse = this.settingsService.getSettings().features.ol.reverseGeolocation[0];
+    return this.http.get<any>(request)
       .pipe(map((data) => {
         if(!data.features.length) {
-          throw new Error("No result was found for request: " + getRequest)
+          throw new Error("No result was found for request: " + reverse.requestUrl)
         }
-        const reverse = settings.features.ol.reverseGeolocation[0];
         return {
           address: jp.query(data, '$' + reverse.addressFieldPath)[0],
           features: jp.query(data, '$' + reverse.featuresFieldPath)[0],

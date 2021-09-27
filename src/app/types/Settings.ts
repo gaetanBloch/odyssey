@@ -47,9 +47,9 @@ interface Features {
       method: string
       requestUrl: string,
       format: string,
-      drawField: string,
-      distanceField: string,
-      durationField: string,
+      drawFieldPath: string,
+      distanceFieldPath: string,
+      durationFieldPath: string,
     }>
   }
 }

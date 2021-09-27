@@ -43,9 +43,9 @@
         "method": "GET",
         "requestUrl": "https://wxs.ign.fr/((IGN_KEY))/itineraire/rest/route.json?origin={{origin}}&destination={{destination}}&method={{method}}&graphName={{locomotion}}",
         "format": "wkt",
-        "drawField": "geometryWkt",
-        "distanceField": "distance",
-        "durationField": "duration"
+        "drawFieldPath": ".geometryWkt",
+        "distanceFieldPath": ".distance",
+        "durationFieldPath": ".duration"
       }]
     }
   }

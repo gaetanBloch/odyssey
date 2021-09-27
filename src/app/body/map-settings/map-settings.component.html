@@ -75,10 +75,17 @@
                    required>
           </mat-form-field>
           <mat-form-field>
-            <mat-label i18n>Transport</mat-label>
+            <mat-label i18n>Locomotion</mat-label>
             <mat-select formControlName='transportType' required>
-              <mat-option value='pieton'>pieton</mat-option>
-              <mat-option value='voiture'>voiture</mat-option>
+              <mat-option value='voiture'>Driving</mat-option>
+              <mat-option value='pieton'>Walking</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label i18n>Method</mat-label>
+            <mat-select formControlName='transportMethod' required>
+              <mat-option value='time'>Time</mat-option>
+              <mat-option value='distance'>Distance</mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field>
