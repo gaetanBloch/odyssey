@@ -2,6 +2,7 @@
   <h1 class='settings__title' i18n>Settings</h1>
   <form class='settings__form' [formGroup]='settingsForm' (ngSubmit)='onSubmit()'>
     <app-file-uploader label='Set Secrets File' i18n-label (fileUploaded)='onSecretsUploaded($event)'></app-file-uploader>
+    <app-file-uploader label='Set Settings File' i18n-label (fileUploaded)='onSettingsUploaded($event)'></app-file-uploader>
     <div *ngIf='!home'>
       <mat-form-field>
         <mat-label i18n>Feature</mat-label>

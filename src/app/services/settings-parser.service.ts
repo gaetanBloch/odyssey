@@ -9,7 +9,8 @@ import settings from '../../assets/default-settings.json';
   providedIn: 'root'
 })
 export class SettingsParserService {
-  private readonly settings: Settings;
+  private settings: Settings;
+  private secrets: Map<string, string>;
 
   static transformToMap = (object: any): Map<string, string> => {
     const out = new Map<string, string>();
@@ -20,13 +21,21 @@ export class SettingsParserService {
   };
 
   constructor() {
-    this.settings = this.resolveSecrets(
-      SettingsParserService.transformToMap(secrets),
-      settings
-    );
+    this.secrets = this.updateSecrets(secrets);
+    this.settings = this.updateSettings(settings);
   }
 
   public getSettings = (): Settings => {
+    return this.settings;
+  }
+
+  public updateSecrets = (newSecrets: any) => {
+    this.secrets = SettingsParserService.transformToMap(newSecrets);
+    return this.secrets;
+  }
+
+  public updateSettings = (newSettings: Settings) => {
+    this.settings = this.resolveSecrets(this.secrets, newSettings);
     return this.settings;
   }
 
@@ -41,8 +50,8 @@ export class SettingsParserService {
     return JSON.parse(settingsString);
   };
 
-  resolveVariables = (toResolve: string, variables: Map<string, string>)
-    : string => {
+  resolveVariables = (toResolve: string, variables: Map<string, string>):
+    string => {
     return this.resolve(toResolve, PlaceholderType.Variable, variables);
   };
 

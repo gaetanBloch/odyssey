@@ -128,17 +128,29 @@ export class MapSettingsComponent implements OnInit {
     );
   }
 
-  private getSettings(value: string): string {
+  private getSettings = (value: string): string => {
     return this.settingsForm.value[value];
   }
 
   onSecretsUploaded = (file: File): void => {
+    this.onFileUploaded(file, (result) => {
+      this.settingsParser.updateSecrets(result);
+    })
+  }
+
+  onSettingsUploaded = (file: File): void => {
+    this.onFileUploaded(file, (result) => {
+      this.settingsParser.updateSettings(result);
+    })
+  }
+
+  private onFileUploaded = (file: File, cb: (result: any) => void): void => {
     if(!file) return;
-    // Read secrets file uploaded
+    // Read uploaded file
     const fileReader = new FileReader();
     fileReader.onload = (e) => {
       // @ts-ignore
-      this.secrets = JSON.parse(fileReader.result);
+      cb(JSON.parse(fileReader.result))
     }
     fileReader.readAsText(file);
   }
