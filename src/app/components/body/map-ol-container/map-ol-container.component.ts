@@ -2,12 +2,13 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { Map, View, Feature } from 'ol';
+import { Map, View, Feature, MapBrowserEvent } from 'ol';
+import { toLonLat, fromLonLat } from 'ol/proj';
 import { createXYZ } from 'ol/tilegrid';
 import { MVT, GeoJSON, WKT } from 'ol/format';
 import { VectorTile, Tile, Vector as VectorLayer } from 'ol/layer';
 import { OSM, Vector, VectorTile as VectorTileSource } from 'ol/source';
-import { Fill, Stroke, Circle, Style, Icon } from 'ol/style';
+import { Stroke, Style, Icon } from 'ol/style';
 import { Point } from 'ol/geom';
 
 // @ts-ignore
@@ -27,7 +28,10 @@ import { SettingsParserService } from '../../../services/settings-parser.service
   styleUrls: ['./map-ol-container.component.scss']
 })
 export class MapOlContainerComponent implements OnInit, OnDestroy {
-  private readonly ignKey = 'choisirgeoportail';
+  private readonly LOCATION = 'location';
+  private readonly ITINERARY = 'itinerary';
+  private readonly POINT = 'point';
+
   private map?: Map;
   private view?: View;
 
@@ -43,9 +47,7 @@ export class MapOlContainerComponent implements OnInit, OnDestroy {
     this.geoService.onPointSet()
       .pipe(takeUntil(this.$destroy))
       .subscribe((point) => {
-        this.map?.getLayers().getArray()
-          .filter(layer => layer.get('title') === 'point')
-          .forEach(layer => this.map?.removeLayer(layer));
+        this.removeLayer(this.LOCATION);
 
         const iconStyle = new Style({
           image: new Icon({
@@ -58,12 +60,10 @@ export class MapOlContainerComponent implements OnInit, OnDestroy {
           featureProjection: 'EPSG:3857',
         });
         features[0]?.setStyle(iconStyle);
-        const vectorSource = new Vector({
-          features
-        });
+        const vectorSource = new Vector({ features });
         const vectorLayer = new VectorLayer({
           // @ts-ignore
-          title: 'point',
+          title: this.LOCATION,
           source: vectorSource,
         });
         this.map?.addLayer(vectorLayer);
@@ -77,9 +77,7 @@ export class MapOlContainerComponent implements OnInit, OnDestroy {
     this.itineraryService.onItinerarySet()
       .pipe(takeUntil(this.$destroy))
       .subscribe((itinerary) => {
-        this.map?.getLayers().getArray()
-          .filter(layer => layer.get('title') === 'itinerary')
-          .forEach(layer => this.map?.removeLayer(layer));
+        this.removeLayer(this.ITINERARY);
         const format = new WKT();
         const feature = format.readFeature(itinerary, {
           dataProjection: 'EPSG:4326',
@@ -88,7 +86,7 @@ export class MapOlContainerComponent implements OnInit, OnDestroy {
         const vectorSource = new Vector({ features: [feature] });
         const vectorLayer = new VectorLayer({
           // @ts-ignore
-          title: 'itinerary',
+          title: this.ITINERARY,
           source: vectorSource,
           style: new Style({
             stroke: new Stroke({
@@ -160,8 +158,36 @@ export class MapOlContainerComponent implements OnInit, OnDestroy {
       } else {
         ignOLLayer.once('change:source', setStyle);
       }
-    })().catch(console.error);
+    })().catch(alert);
   };
+
+  private removeLayer = (title: string): void => {
+    this.map?.getLayers().getArray()
+      .filter(layer => layer.get('title') === title)
+      .forEach(layer => this.map?.removeLayer(layer));
+  }
+
+  private displayPoint =  (e: MapBrowserEvent<any>, map?: Map): void => {
+    this.removeLayer(this.POINT);
+    const feature = new Feature(new Point(e.coordinate));
+    const iconStyle = new Style({
+      image: new Icon({
+        src: 'assets/location-dot-solid.png',
+      }),
+    });
+    feature.setStyle(iconStyle);
+    // feature.setProperties({
+    //   dataProjection: 'EPSG:4326',
+    //   featureProjection: 'EPSG:3857'
+    // })
+    const vectorSource = new Vector({ features: [feature] });
+    const vectorLayer = new VectorLayer({
+      // @ts-ignore
+      title: this.POINT,
+      source: vectorSource,
+    });
+    map?.addLayer(vectorLayer);
+  }
 
   // Init component
   ngOnInit(): void {
@@ -180,9 +206,11 @@ export class MapOlContainerComponent implements OnInit, OnDestroy {
     // Connection to Geoportal server
     Gp.Services.getConfig({
       // Or download the file from https://ignf.github.io/geoportal-access-lib/latest/jsdoc/tutorial-optimize-getconfig.html
-      apiKey: this.ignKey,
+      apiKey: this.settingsService.getSecrets().get('IGN_KEY'),
       onSuccess: this.displayLayers
     });
+    // Display pin on click
+    this.map.on('click', (e) => this.displayPoint(e, this.map))
   }
 
   ngOnDestroy(): void {

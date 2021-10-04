@@ -29,6 +29,10 @@ export class SettingsParserService {
     return this.settings;
   }
 
+  public getSecrets = (): Map<string, string> => {
+    return this.secrets
+  }
+
   public updateSecrets = (newSecrets: any) => {
     this.secrets = SettingsParserService.transformToMap(newSecrets);
     return this.secrets;
