@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { FeatureType } from '../../types/FeatureType';
+import { FeatureType } from '../../../types/FeatureType';
 import { Router } from '@angular/router';
-import { GeolocationService } from '../../services/geolocation.service';
-import { ItineraryService } from '../../services/itinerary.service';
+import { GeolocationService } from '../../../services/geolocation.service';
+import { ItineraryService } from '../../../services/itinerary.service';
 
-import { SettingsParserService } from '../../services/settings-parser.service';
+import { SettingsParserService } from '../../../services/settings-parser.service';
 
 @Component({
   selector: 'app-map-settings',

@@ -2,12 +2,13 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { Map, View } from 'ol';
+import { Map, View, Feature } from 'ol';
 import { createXYZ } from 'ol/tilegrid';
 import { MVT, GeoJSON, WKT } from 'ol/format';
 import { VectorTile, Tile, Vector as VectorLayer } from 'ol/layer';
 import { OSM, Vector, VectorTile as VectorTileSource } from 'ol/source';
-import { Fill, Stroke, Circle, Style } from 'ol/style';
+import { Fill, Stroke, Circle, Style, Icon } from 'ol/style';
+import { Point } from 'ol/geom';
 
 // @ts-ignore
 import LayerSwitcher from 'ol-ext/control/LayerSwitcher';
@@ -16,8 +17,8 @@ import { applyStyle } from 'ol-mapbox-style';
 // @ts-ignore
 import * as Gp from 'geoportal-extensions-openlayers';
 
-import { GeolocationService } from '../../services/geolocation.service';
-import { ItineraryService } from '../../services/itinerary.service';
+import { GeolocationService } from '../../../services/geolocation.service';
+import { ItineraryService } from '../../../services/itinerary.service';
 
 @Component({
   selector: 'app-map-container',
@@ -40,76 +41,66 @@ export class MapOlContainerComponent implements OnInit, OnDestroy {
     this.geoService.onPointSet()
       .pipe(takeUntil(this.$destroy))
       .subscribe((point) => {
-      this.map?.getLayers().getArray()
-        .filter(layer => layer.get('title') === 'point')
-        .forEach(layer => this.map?.removeLayer(layer));
-      const image = new Circle({
-        radius: 7,
-        fill: new Fill({ color: 'rgba(0,0,0,0.6)' }),
-        stroke: new Stroke({ color: 'rgba(0,0,0,0.6)', width: 1 })
-      });
+        this.map?.getLayers().getArray()
+          .filter(layer => layer.get('title') === 'point')
+          .forEach(layer => this.map?.removeLayer(layer));
 
-      // @ts-ignore
-      const styleFunction = function(feat) {
-        // @ts-ignore
-        return styles[feat.getGeometry().getType()];
-      };
+        const iconStyle = new Style({
+          image: new Icon({
+            src: 'assets/location-check-solid.png',
+          }),
+        });
 
-      const styles = {
-        'Point': new Style({
-          image: image
-        })
-      };
-
-      const vectorSource = new Vector({
-        features: new GeoJSON().readFeatures(point, {
+        const features = new GeoJSON().readFeatures(point, {
           dataProjection: 'EPSG:4326',
-          featureProjection: 'EPSG:3857'
-        })
-      });
-      const vectorLayer = new VectorLayer({
-        // @ts-ignore
-        title: 'point',
-        source: vectorSource,
-        style: styleFunction
-      });
-      this.map?.addLayer(vectorLayer);
+          featureProjection: 'EPSG:3857',
+        });
+        features[0]?.setStyle(iconStyle);
+        const vectorSource = new Vector({
+          features
+        });
+        const vectorLayer = new VectorLayer({
+          // @ts-ignore
+          title: 'point',
+          source: vectorSource,
+        });
+        this.map?.addLayer(vectorLayer);
 
-      const feature = vectorSource.getFeatures()[0];
-      const target = feature.getGeometry();
-      // @ts-ignore
-      this.view?.fit(target, { padding: [50, 50, 50, 50], minResolution: 3 });
-    });
+        const feature = vectorSource.getFeatures()[0];
+        const target = feature.getGeometry();
+        // @ts-ignore
+        this.view?.fit(target, { padding: [50, 50, 50, 50], minResolution: 3 });
+      });
 
     this.itineraryService.onItinerarySet()
       .pipe(takeUntil(this.$destroy))
       .subscribe((itinerary) => {
-      this.map?.getLayers().getArray()
-        .filter(layer => layer.get('title') === 'itinerary')
-        .forEach(layer => this.map?.removeLayer(layer));
-      const format = new WKT();
-      const feature = format.readFeature(itinerary, {
-        dataProjection: 'EPSG:4326',
-        featureProjection: 'EPSG:3857',
-      });
-      const vectorSource = new Vector({ features: [feature] });
-      const vectorLayer = new VectorLayer({
-        // @ts-ignore
-        title: 'itinerary',
-        source: vectorSource,
-        style: new Style({
-          stroke: new Stroke({
-            color: 'rgba(0,0,0,0.7)',
-            width: 3,
+        this.map?.getLayers().getArray()
+          .filter(layer => layer.get('title') === 'itinerary')
+          .forEach(layer => this.map?.removeLayer(layer));
+        const format = new WKT();
+        const feature = format.readFeature(itinerary, {
+          dataProjection: 'EPSG:4326',
+          featureProjection: 'EPSG:3857',
+        });
+        const vectorSource = new Vector({ features: [feature] });
+        const vectorLayer = new VectorLayer({
+          // @ts-ignore
+          title: 'itinerary',
+          source: vectorSource,
+          style: new Style({
+            stroke: new Stroke({
+              color: 'rgba(0,0,0,0.7)',
+              width: 3,
+            }),
           }),
-        }),
+        });
+        this.map?.addLayer(vectorLayer);
+        this.view?.fit(
+          vectorSource.getExtent(),
+          { padding: [50, 50, 50, 50], minResolution: 3 }
+        );
       });
-      this.map?.addLayer(vectorLayer);
-      this.view?.fit(
-        vectorSource.getExtent(),
-        { padding: [50, 50, 50, 50], minResolution: 3 }
-      );
-    });
   }
 
   // Display MapLayers
