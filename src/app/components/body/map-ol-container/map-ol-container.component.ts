@@ -8,7 +8,7 @@ import { createXYZ } from 'ol/tilegrid';
 import { MVT, GeoJSON, WKT } from 'ol/format';
 import { VectorTile, Tile, Vector as VectorLayer } from 'ol/layer';
 import { OSM, Vector, VectorTile as VectorTileSource } from 'ol/source';
-import { Stroke, Style, Icon } from 'ol/style';
+import { Stroke, Style, Icon, Fill, Text } from 'ol/style';
 import { Point } from 'ol/geom';
 
 // @ts-ignore
@@ -165,21 +165,25 @@ export class MapOlContainerComponent implements OnInit, OnDestroy {
     this.map?.getLayers().getArray()
       .filter(layer => layer.get('title') === title)
       .forEach(layer => this.map?.removeLayer(layer));
-  }
+  };
 
-  private displayPoint =  (e: MapBrowserEvent<any>, map?: Map): void => {
+  private displayPoint = (e: MapBrowserEvent<any>, map?: Map): void => {
     this.removeLayer(this.POINT);
+    const coords = toLonLat(e.coordinate);
     const feature = new Feature(new Point(e.coordinate));
     const iconStyle = new Style({
       image: new Icon({
         src: 'assets/location-dot-solid.png',
       }),
+      text: new Text({
+        offsetY: 25,
+        text: `lon: ${coords[0]}, lat: ${coords[1]}`,
+        font: '15px Open Sans,sans-serif',
+        fill: new Fill({ color: '#111' }),
+        stroke: new Stroke({ color: '#eee', width: 2 })
+      })
     });
     feature.setStyle(iconStyle);
-    // feature.setProperties({
-    //   dataProjection: 'EPSG:4326',
-    //   featureProjection: 'EPSG:3857'
-    // })
     const vectorSource = new Vector({ features: [feature] });
     const vectorLayer = new VectorLayer({
       // @ts-ignore
@@ -187,7 +191,7 @@ export class MapOlContainerComponent implements OnInit, OnDestroy {
       source: vectorSource,
     });
     map?.addLayer(vectorLayer);
-  }
+  };
 
   // Init component
   ngOnInit(): void {
@@ -210,7 +214,7 @@ export class MapOlContainerComponent implements OnInit, OnDestroy {
       onSuccess: this.displayLayers
     });
     // Display pin on click
-    this.map.on('click', (e) => this.displayPoint(e, this.map))
+    this.map.on('click', (e) => this.displayPoint(e, this.map));
   }
 
   ngOnDestroy(): void {
