@@ -19,6 +19,7 @@ import * as Gp from 'geoportal-extensions-openlayers';
 
 import { GeolocationService } from '../../../services/geolocation.service';
 import { ItineraryService } from '../../../services/itinerary.service';
+import { SettingsParserService } from '../../../services/settings-parser.service';
 
 @Component({
   selector: 'app-map-container',
@@ -35,7 +36,8 @@ export class MapOlContainerComponent implements OnInit, OnDestroy {
 
   constructor(
     private geoService: GeolocationService,
-    private itineraryService: ItineraryService
+    private itineraryService: ItineraryService,
+    private settingsService: SettingsParserService,
   ) {
 
     this.geoService.onPointSet()
@@ -105,6 +107,8 @@ export class MapOlContainerComponent implements OnInit, OnDestroy {
 
   // Display MapLayers
   private displayLayers = (): void => {
+    const maps = this.settingsService.getSettings().maps.ol;
+
     const lsControl = new LayerSwitcher({
       collapsed: true,
       reordering: false,
@@ -115,7 +119,7 @@ export class MapOlContainerComponent implements OnInit, OnDestroy {
     // OpenStreetMap Layer
     const osmLayer = new Tile({
       // @ts-ignore
-      title: 'Raster OSM',
+      title: maps.osmRaster.title,
       baseLayer: true,
       source: new OSM()
     });
@@ -124,12 +128,12 @@ export class MapOlContainerComponent implements OnInit, OnDestroy {
     // IGN Vector Layer
     const ignOLLayer = new VectorTile({
       // @ts-ignore
-      title: 'Vector IGN',
+      title: maps.ignVector.title,
       baseLayer: true,
       visible: false,
       source: new VectorTileSource({
         format: new MVT(),
-        url: `https://wxs.ign.fr/${ this.ignKey }/geoportail/tms/1.0.0/PLAN.IGN/{z}/{x}/{y}.pbf`,
+        url: maps.ignVector.tileUrl,
         tileGrid: createXYZ({
           maxZoom: 22,
           minZoom: 1,
@@ -146,9 +150,7 @@ export class MapOlContainerComponent implements OnInit, OnDestroy {
 
     // Fetch style IIFE
     (async () => {
-      const plan = await fetch(
-        `https://wxs.ign.fr/${ this.ignKey }/static/vectorTiles/styles/PLAN.IGN/standard.json`
-      );
+      const plan = await fetch(maps.ignVector.styleUrl);
       const style = await plan.json();
       const setStyle = async () => {
         applyStyle(ignOLLayer, style, 'plan_ign');
