@@ -4,6 +4,18 @@
   flex-direction: column;
   box-shadow: 1px 0 3px rgba(100, 100, 100, 0.45);
 
+  &__info {
+    display: flex;
+    flex-direction: column;
+
+    &--nopoint {
+      display: inline-flex;
+      text-align: center;
+      margin: 0.5em auto;
+      color: #b1b4b9;
+    }
+  }
+
   &__title {
     display: inline-flex;
     font-size: 1.25em;

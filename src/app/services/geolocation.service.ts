@@ -3,15 +3,16 @@ import { Coordinates } from '../types/Coordinates';
 import { HttpClient } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { SettingsParserService } from './settings-parser.service';
 
 // @ts-ignore
 import jp from 'jsonpath'
-import { SettingsParserService } from './settings-parser.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GeolocationService {
+  private currentLocation = new Subject<any>();
   private currentPoint = new Subject<any>();
 
   constructor(private http: HttpClient, private settingsService: SettingsParserService) {
@@ -46,6 +47,14 @@ export class GeolocationService {
           features: jp.query(data, '$' + reverse.featuresFieldPath)[0],
         };
       }))
+  }
+
+  public setLocation = (point: any): void => {
+    this.currentLocation.next(point);
+  }
+
+  public onLocationSet = (): Observable<any> => {
+    return this.currentLocation.asObservable();
   }
 
   public setPoint = (point: any): void => {

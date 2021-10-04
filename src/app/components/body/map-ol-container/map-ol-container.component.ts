@@ -44,7 +44,7 @@ export class MapOlContainerComponent implements OnInit, OnDestroy {
     private settingsService: SettingsParserService,
   ) {
 
-    this.geoService.onPointSet()
+    this.geoService.onLocationSet()
       .pipe(takeUntil(this.$destroy))
       .subscribe((point) => {
         this.removeLayer(this.LOCATION);
@@ -167,20 +167,13 @@ export class MapOlContainerComponent implements OnInit, OnDestroy {
       .forEach(layer => this.map?.removeLayer(layer));
   };
 
-  private displayPoint = (e: MapBrowserEvent<any>, map?: Map): void => {
+  private displayPoint = (e: MapBrowserEvent<any>): void => {
     this.removeLayer(this.POINT);
     const coords = toLonLat(e.coordinate);
     const feature = new Feature(new Point(e.coordinate));
     const iconStyle = new Style({
       image: new Icon({
         src: 'assets/location-dot-solid.png',
-      }),
-      text: new Text({
-        offsetY: 25,
-        text: `lon: ${coords[0]}, lat: ${coords[1]}`,
-        font: '15px Open Sans,sans-serif',
-        fill: new Fill({ color: '#111' }),
-        stroke: new Stroke({ color: '#eee', width: 2 })
       })
     });
     feature.setStyle(iconStyle);
@@ -190,7 +183,8 @@ export class MapOlContainerComponent implements OnInit, OnDestroy {
       title: this.POINT,
       source: vectorSource,
     });
-    map?.addLayer(vectorLayer);
+    this.map?.addLayer(vectorLayer);
+    this.geoService.setPoint(coords);
   };
 
   // Init component
@@ -214,7 +208,7 @@ export class MapOlContainerComponent implements OnInit, OnDestroy {
       onSuccess: this.displayLayers
     });
     // Display pin on click
-    this.map.on('click', (e) => this.displayPoint(e, this.map));
+    this.map.on('click', this.displayPoint);
   }
 
   ngOnDestroy(): void {

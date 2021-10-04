@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { FeatureType } from '../../../types/FeatureType';
 import { Router } from '@angular/router';
@@ -6,13 +6,18 @@ import { GeolocationService } from '../../../services/geolocation.service';
 import { ItineraryService } from '../../../services/itinerary.service';
 
 import { SettingsParserService } from '../../../services/settings-parser.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-map-settings',
   templateUrl: './map-settings.component.html',
   styleUrls: ['./map-settings.component.scss']
 })
-export class MapSettingsComponent implements OnInit {
+export class MapSettingsComponent implements OnInit, OnDestroy {
+  // Subject for unsubscription
+  private readonly $destroy = new Subject();
+
   settingsForm = new FormGroup({
     featureType: new FormControl(''),
     geoAddress: new FormControl(''),
@@ -28,7 +33,11 @@ export class MapSettingsComponent implements OnInit {
   reverseAddress? = ' ';
   distance? = ' ';
   duration? = ' ';
-  home = true
+  home = true;
+  pointed = false;
+  pointLon = ' ';
+  pointLat = ' ';
+  pointAddress? = ' ';
 
   constructor(
     private router: Router,
@@ -38,8 +47,32 @@ export class MapSettingsComponent implements OnInit {
   ) {
   }
 
+  ngOnDestroy(): void {
+    // Unsubscription
+    this.$destroy.next();
+    this.$destroy.complete();
+  }
+
   ngOnInit(): void {
     this.home = this.router.url === '/';
+    this.geoService.onPointSet()
+      .pipe(takeUntil(this.$destroy))
+      .subscribe((point) => {
+        this.pointed = true;
+        this.pointLon = point[0];
+        this.pointLat = point[1];
+        const values = new Map<string, string>();
+        values.set('lon', this.pointLon);
+        values.set('lat', this.pointLat);
+        const request = this.settingsParser.resolveVariables(
+          this.settingsParser.getSettings().features.ol.reverseGeolocation[0].requestUrl,
+          values
+        );
+        this.geoService.getAddressFromCoordinates(request)
+          .subscribe(
+            (coords) => this.pointAddress = coords.address
+          ,() => this.pointAddress = 'Not found');
+      });
   }
 
   // Getting all values of Feature enum
@@ -89,9 +122,9 @@ export class MapSettingsComponent implements OnInit {
       .subscribe((coords) => {
         this.geoLongitude = coords.longitude;
         this.geoLatitude = coords.latitude;
-        this.geoService.setPoint(coords.features);
+        this.geoService.setLocation(coords.features);
       }, (error) => alert(error.message));
-  }
+  };
 
   reverse = (): void => {
     const values = new Map<string, string>();
@@ -104,9 +137,9 @@ export class MapSettingsComponent implements OnInit {
     this.geoService.getAddressFromCoordinates(request)
       .subscribe((coords) => {
         this.reverseAddress = coords.address;
-        this.geoService.setPoint(coords.features);
+        this.geoService.setLocation(coords.features);
       }, (error) => alert(error.message));
-  }
+  };
 
   calculateItinerary = (): void => {
     const values = new Map<string, string>();
@@ -120,38 +153,51 @@ export class MapSettingsComponent implements OnInit {
     );
     this.itineraryService.getItinerary(request)
       .subscribe(
-      (itinerary) => {
-        this.distance = itinerary.distance;
-        this.duration = itinerary.duration;
-        this.itineraryService.setItinerary(itinerary.wkt);
-      }, (error) => alert(error.message)
-    );
-  }
+        (itinerary) => {
+          this.distance = itinerary.distance;
+          this.duration = itinerary.duration;
+          this.itineraryService.setItinerary(itinerary.wkt);
+        }, (error) => alert(error.message)
+      );
+  };
 
   private getSettings = (value: string): string => {
     return this.settingsForm.value[value];
-  }
+  };
 
   onSecretsUploaded = (file: File): void => {
     this.onFileUploaded(file, (result) => {
       this.settingsParser.updateSecrets(result);
-    })
-  }
+    });
+  };
 
   onSettingsUploaded = (file: File): void => {
     this.onFileUploaded(file, (result) => {
       this.settingsParser.updateSettings(result);
-    })
-  }
+    });
+  };
 
   private onFileUploaded = (file: File, cb: (result: any) => void): void => {
-    if(!file) return;
+    if (!file) return;
     // Read uploaded file
     const fileReader = new FileReader();
     fileReader.onload = (e) => {
       // @ts-ignore
-      cb(JSON.parse(fileReader.result))
-    }
+      cb(JSON.parse(fileReader.result));
+    };
     fileReader.readAsText(file);
+  };
+
+  getFeatureName = (feature: FeatureType | string): string => {
+    switch (feature) {
+      case 'geolocation':
+        return 'Geolocation';
+      case 'reverseGeolocation':
+        return 'Reverse Geolocation'
+      case 'itinerary':
+        return 'Itinerary';
+      default :
+        return '';
+    }
   }
 }
