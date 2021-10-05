@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "fr-gis": {
+    "odyssey": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -23,7 +23,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/fr-gis",
+            "outputPath": "dist/odyssey",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -85,10 +85,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "fr-gis:build:production"
+              "browserTarget": "odyssey:build:production"
             },
             "development": {
-              "browserTarget": "fr-gis:build:development"
+              "browserTarget": "odyssey:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -96,7 +96,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "fr-gis:build"
+            "browserTarget": "odyssey:build"
           }
         },
         "test": {
@@ -123,11 +123,11 @@
         "cypress-run": {
           "builder": "@cypress/schematic:cypress",
           "options": {
-            "devServerTarget": "fr-gis:serve"
+            "devServerTarget": "odyssey:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "fr-gis:serve:production"
+              "devServerTarget": "odyssey:serve:production"
             }
           }
         },
@@ -141,13 +141,13 @@
         "e2e": {
           "builder": "@cypress/schematic:cypress",
           "options": {
-            "devServerTarget": "fr-gis:serve",
+            "devServerTarget": "odyssey:serve",
             "watch": true,
             "headless": false
           },
           "configurations": {
             "production": {
-              "devServerTarget": "fr-gis:serve:production"
+              "devServerTarget": "odyssey:serve:production"
             }
           }
         },
@@ -158,5 +158,5 @@
       }
     }
   },
-  "defaultProject": "fr-gis"
+  "defaultProject": "odyssey"
 }

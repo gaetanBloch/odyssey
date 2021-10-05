@@ -1,7 +1,7 @@
 {
-  "name": "fr-gis",
+  "name": "odyssey",
   "version": "0.3.0",
-  "description": "Block GIS",
+  "description": "Odyssey Map displayer",
   "main": "src/index.ts",
   "engines": {
     "node": "14.x"
@@ -28,14 +28,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/gaetanBloch/fr-gis.git"
+    "url": "git+https://github.com/gaetanBloch/odyssey.git"
   },
   "author": "Gaëtan Bloch",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/gaetanBloch/fr-gis/issues"
+    "url": "https://github.com/gaetanBloch/odyssey/issues"
   },
-  "homepage": "https://github.com/gaetanBloch/fr-gis#readme",
+  "homepage": "https://github.com/gaetanBloch/odyssey#readme",
   "dependencies": {
     "@angular/animations": "~12.2.0",
     "@angular/cdk": "^12.2.4",

@@ -22,16 +22,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'fr-gis'`, () => {
+  it(`should have as title 'odyssey'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('fr-gis');
+    expect(app.title).toEqual('odyssey');
   });
 
   it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.content span')?.textContent).toContain('fr-gis app is running!');
+    expect(compiled.querySelector('.content span')?.textContent).toContain('odyssey app is running!');
   });
 });

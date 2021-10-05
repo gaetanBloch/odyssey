@@ -1,10 +1,20 @@
 {
-  "name": "FR GIS",
-  "short_name": "fr-gis",
+  "name": "Odyssey",
+  "short_name": "odyssey",
   "icons": [
     {
       "src": "./logo.png",
       "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "./location-check-solid.png",
+      "sizes": "20x25",
+      "type": "image/png"
+    },
+    {
+      "src": "./location.dot.solid.png",
+      "sizes": "20x25",
       "type": "image/png"
     }
   ],
@@ -12,5 +22,5 @@
   "background_color": "#e0e0e0",
   "start_url": ".",
   "display": "standalone",
-  "orientation": "portrait"
+  "orientation": "landscape"
 }

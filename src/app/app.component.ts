@@ -7,5 +7,5 @@ import { GeolocationService } from './services/geolocation.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'fr-gis';
+  title = 'odyssey';
 }
