@@ -27,6 +27,8 @@
         "longitudeFieldPath": ".features[0].geometry.coordinates[0]",
         "latitudeFieldPath": ".features[0].geometry.coordinates[1]",
         "featuresFieldPath": "",
+        "headers": [
+        ],
         "requestUrl": "https://api-adresse.data.gouv.fr/search?q={{address}}&limit=1"
       }],
       "reverseGeolocation": [{
@@ -35,12 +37,16 @@
         "method": "GET",
         "addressFieldPath": ".features[0].properties.label",
         "featuresFieldPath": "",
+        "headers": [
+        ],
         "requestUrl": "https://api-adresse.data.gouv.fr/reverse?lon={{lon}}&lat={{lat}}"
       }],
       "itinerary": [{
         "title": "IGN",
         "default": true,
         "method": "GET",
+        "headers": [
+        ],
         "requestUrl": "https://wxs.ign.fr/((IGN_KEY))/itineraire/rest/route.json?origin={{origin}}&destination={{destination}}&method={{method}}&graphName={{locomotion}}",
         "format": "wkt",
         "drawFieldPath": ".geometryWkt",

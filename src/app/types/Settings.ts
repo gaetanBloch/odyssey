@@ -25,29 +25,32 @@ interface Maps {
 interface Features {
   ol: {
     geolocation: Array<{
-      title: string,
+      title?: string,
       default?: boolean,
-      method: string,
+      method?: string,
       longitudeFieldPath: string,
       latitudeFieldPath: string,
       featuresFieldPath: string,
+      headers?: Array<{ key: string, value: string }>,
       requestUrl: string,
     }>,
     reverseGeolocation: Array<{
-      title: string,
+      title?: string,
       default?: boolean,
-      method: string,
+      method?: string,
       addressFieldPath: string,
       featuresFieldPath: string,
+      headers?: Array<{ key: string, value: string }>,
       requestUrl: string,
     }>,
     itinerary: Array<{
-      title: string,
+      title?: string,
       default?: boolean,
-      method: string
+      method?: string,
+      headers?: Array<{ key: string, value: string }>,
       requestUrl: string,
-      format: string,
-      drawFieldPath: string,
+      format?: string,
+      drawFieldPath?: string,
       distanceFieldPath: string,
       durationFieldPath: string,
     }>
