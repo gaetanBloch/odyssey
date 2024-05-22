@@ -93,7 +93,7 @@
     "karma-coverage": "~2.0.3",
     "lint-staged": "^11.1.2",
     "mini-css-extract-plugin": "^2.1.0",
-    "postcss": "^8.3.6",
+    "postcss": "^8.4.31",
     "postcss-loader": "^6.1.1",
     "prettier": "^2.3.2",
     "rimraf": "^3.0.2",
